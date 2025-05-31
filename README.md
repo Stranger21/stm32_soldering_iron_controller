@@ -24,6 +24,22 @@ Video of operation here: (Project in active development, the features will chang
 
 [![STM32 T12 custom firmware](https://img.youtube.com/vi/j0HQq4aRiXw/0.jpg)](https://www.youtube.com/watch?v=j0HQq4aRiXw "STM32 T12 custom firmware")
 
+Add New function - 
+1 Auto change profile depends on the input voltage. 
+ T12_volt        110     // 11.0V for 115 
+ C245_volt       190     // 19.0V for 245
+ C210_volt       140     // 14.0V for 210 
+ Volt_Tolerance  14      // 1.4V 
+ 
+ On this function a system menu
+ 
+2 T12 profile change to C115
+
+3 Add system menu function Clik for Boost when Run
+
+4 Other change default value 
+ 
+
 
 ## Project details
 * This project started by forking [PTDreamer's firmware](https://github.com/PTDreamer/stm32_soldering_iron_controller). Since then it became a separate project.
