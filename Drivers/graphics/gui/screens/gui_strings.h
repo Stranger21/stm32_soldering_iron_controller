@@ -195,6 +195,7 @@ typedef struct{
   char * clkMode[2];
   char * errMode[3];
   char * InitMode[3];
+  char * AutoSet[3];
   char * WakeModes[4];
 
 }strings_t;

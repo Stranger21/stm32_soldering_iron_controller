@@ -146,6 +146,10 @@ typedef enum{
   dim_off                 = 0,
   dim_sleep               = 1,
   dim_always              = 2,
+  
+  autoset_off			  = 0,
+  autoset_vin			  = 1,
+  autoset_ntc			  = 2,
 
   error_sleep             = 0,
   error_run               = 1,

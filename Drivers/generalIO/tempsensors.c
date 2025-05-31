@@ -44,7 +44,11 @@ int16_t readColdJunctionSensorTemp_x10(bool new, bool tempUnit){
 
   if(new){
     do{                                                                                                 // Detection loop
-      if(getProfileSettings()->ntc.enabled){                                                           // If NTC enabled
+      if(getSystemSettings()->AutoSwitchSet == autoset_ntc){  // проверяем режим работы автопрофиля
+			getProfileSettings()->ntc.enabled = disable;
+			}
+	  
+	  if(getProfileSettings()->ntc.enabled){                                                           // If NTC enabled
         if(error){                                                                                      // If errors (handle removed)
           ntc_status = _USE_EXTERNAL;                                                                   // Force external NTC mode, clear detected and first pass flags
         }

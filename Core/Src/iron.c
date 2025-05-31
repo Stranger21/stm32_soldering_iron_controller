@@ -125,12 +125,14 @@ void ironInit(TIM_HandleTypeDef *delaytimer, TIM_HandleTypeDef *pwmtimer, uint32
 uint8_t AutoSwitchProfile(void){
     static uint32_t change_timer;
     static uint8_t profile, last_profile;
-    uint32_t volts = getSupplyVoltage_v_x10();
+    uint32_t volts = getSupplyVoltage_v_x10();  // Напряжение входное 
+	uint32_t voltsNTC = NTC.last_avg;  // Напряжение NTC
     uint32_t now = HAL_GetTick();
     uint8_t current_profile = getCurrentProfile();
 
     if(!change_timer || change_timer > now){            // Idle or changing timeout active
-       
+       if(getSystemSettings()->AutoSwitchSet == autoset_vin){  // Измерения по Входному напряжению
+
         if(abs(volts - C245_volt) < Volt_Tolerance)      // Check voltages, assign profile
             profile = profile_C245;
         else if(abs(volts - C210_volt) < Volt_Tolerance)
@@ -139,7 +141,19 @@ uint8_t AutoSwitchProfile(void){
             profile = profile_T12;
         else
             profile = profile_None;                  // Unknown voltage, set None to force safe mode
-       
+       }else if(getSystemSettings()->AutoSwitchSet == autoset_ntc){ //Напряжение NTC
+
+			if((voltsNTC <= C245_volt_NTCmax)&&(voltsNTC >= C245_volt_NTCmin))      // Check voltages, assign profile
+            profile = profile_C245;
+        else if((voltsNTC <= C210_volt_NTCmax)&&(voltsNTC >= C210_volt_NTCmin))
+            profile = profile_C210;
+        else if((voltsNTC <= T12_volt_NTCmax)&&(voltsNTC >= T12_volt_NTCmin))
+            profile = profile_T12;
+        else
+            profile = profile_None; 
+
+		}
+
         if(profile!= last_profile){                     // Profile changed, start timer
             last_profile = profile;
             Iron.Pwm_Out=0;                             // Disable power while changing

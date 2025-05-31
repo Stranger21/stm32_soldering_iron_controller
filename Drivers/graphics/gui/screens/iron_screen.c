@@ -368,7 +368,7 @@ static void iron_onEnter(screen_t *scr){
   }
   if(scr==&Screen_settings){
 		comboResetIndex(Screen_iron.current_widget);
-		if (getSystemSettings()->AutoSwitchSet == true){
+		if (getSystemSettings()->AutoSwitchSet != autoset_off){
 
 			editable_IRON_Profile->selectable.state=widget_idle;            // Set widget in idle mode
 			editable_IRON_Profile->selectable.previous_state=widget_idle;
@@ -376,7 +376,7 @@ static void iron_onEnter(screen_t *scr){
   }
   else if(scr==&Screen_iron){                                           // iron screen was reloaded after changing the profile
     
-	if (getSystemSettings()->AutoSwitchSet == false){
+	if (getSystemSettings()->AutoSwitchSet == autoset_off){
 	editable_IRON_Profile->selectable.state=widget_edit;            // Set widget in editing mode
     editable_IRON_Profile->selectable.previous_state=widget_selected;
 	}else
@@ -993,7 +993,10 @@ static void iron_create(screen_t *scr){
   #ifdef USE_NTC
   //  [ NTC screen ]
   //
+  if(getSystemSettings()->AutoSwitchSet != autoset_ntc){  // Меню доступно только когда не NTC режим автопрофиль
+  
   newComboScreen(w, strings[lang].IRON_NTC_MENU, screen_iron_ntc, NULL);
+  }
   #endif
 
   //  [ BACK button ]
@@ -1110,12 +1113,16 @@ void iron_screen_setup(screen_t *scr){
   scr->create = &iron_advFilter_create;
 
   #ifdef USE_NTC
+  //добавить показ NTC когда не выбран режим его автопрофиля
+  if(getSystemSettings()->AutoSwitchSet != autoset_ntc){  // Меню доступно только когда не NTC режим автопрофиль
   scr=&Screen_iron_ntc;
   oled_addScreen(scr, screen_iron_ntc);
   scr->onEnter = &iron_ntc_onEnter;
   scr->onExit = &iron_onExit;
   scr->processInput=&autoReturn_ProcessInput;
   scr->create = &iron_ntc_create;
+  }
+  
   #endif
 
 }

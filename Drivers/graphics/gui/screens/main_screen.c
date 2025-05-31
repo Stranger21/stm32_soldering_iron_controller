@@ -668,7 +668,7 @@ int main_screenProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *sta
 
           case Rotate_Increment_while_click:
           case Rotate_Decrement_while_click:
-        	if  (getSystemSettings()->AutoSwitchSet == false){ // Отключение переключения профиля ручкой
+        	if  (getSystemSettings()->AutoSwitchSet == autoset_off){ // Отключение переключения профиля ручкой
             mainScr.setMode=main_profileselect;
         	}
             break;
@@ -728,7 +728,7 @@ int main_screenProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *sta
             break;
         }
 
-        if(profile!=getCurrentProfile() && getSystemSettings()->AutoSwitchSet == false){
+        if(profile!=getCurrentProfile() && getSystemSettings()->AutoSwitchSet == autoset_off){
           updateTempData(force_update);                         // Update current data
           if(isCurrentProfileChanged())                         // If there's unsaved profile data
             Error_Handler();                                    // We shouldn't have anything unsaved here

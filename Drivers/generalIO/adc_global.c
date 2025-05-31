@@ -348,7 +348,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* _hadc){
 //#endif
     handle_ADC_Data();
     //для переключения по напряжению проверяем переменную настроек
-	if(getSystemSettings()->AutoSwitchSet == true){
+	if(getSystemSettings()->AutoSwitchSet != autoset_off){
     if(AutoSwitchProfile()){
         HAL_IWDG_Refresh(&hiwdg);		// Profile changing, skip Iron processign and return
         return;

@@ -54,6 +54,14 @@ uint8_t AutoSwitchProfile(void);
 #define C210_volt       140     // 14.0V 210 ставим около 13 до 15 для 210
 #define Volt_Tolerance  14      // 1.4V сколько вольт коридор для определения
 
+#define T12_volt_NTCmax        2145     // Напряжения в отсчетах АЦП по формуле ADC = (4095*res)/(pullup+res) pullup равен 4.7 на схеме 2.1s около 10ком 1900 =9ком 2145=11ком
+#define T12_volt_NTCmin        1900
+#define C245_volt_NTCmax       800     //  245 замкнуто , или не больше 1 КОМ что  то около 800 
+#define C245_volt_NTCmin       0
+#define C210_volt_NTCmax       4095     // 210 открыто , что около 4095 или около 
+#define C210_volt_NTCmin       3900 
+
+
 void readWake(void);
 bool IronWake(wakeSrc_t src);
 void resetIronError(void);

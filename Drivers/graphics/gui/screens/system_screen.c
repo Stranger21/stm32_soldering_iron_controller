@@ -200,6 +200,9 @@ static void * getAutoSwitchSet() {
 }
 static void setAutoSwitchSet(uint32_t *val) {
   getSystemSettings()->AutoSwitchSet = * val;
+  if(getSystemSettings()->AutoSwitchSet == autoset_ntc){
+  getProfileSettings()->ntc.enabled = disable;
+  }
 }
 //=========================================================
 static void system_onEnter(screen_t *scr){
@@ -420,8 +423,8 @@ static void system_create(screen_t *scr){
   edit->big_step = 1;
   edit->step = 1;
   edit->setData = (setterFn)&setAutoSwitchSet;
-  edit->options = strings[lang].OffOn;
-  edit->numberOfOptions = 2;
+  edit->options = strings[lang].AutoSet;
+  edit->numberOfOptions = 3;
 
 #ifdef ENABLE_DEBUG_SCREEN
   //  [ Debug enable Widget ]
@@ -445,6 +448,12 @@ static void system_create(screen_t *scr){
 
   updateTemperatureUnit();
   update_System_menu();
+  
+  if(getSystemSettings()->AutoSwitchSet == autoset_ntc){
+  getProfileSettings()->ntc.enabled = disable;
+  
+  }
+  
 }
 
 int system_ProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *state){
