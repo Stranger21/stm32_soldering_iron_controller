@@ -96,6 +96,7 @@ typedef struct{
   char * SYSTEM_Button_Wake;
   char * SYSTEM_Shake_Wake;
   char * SYSTEM_Encoder;
+  char * SYSTEM_Click;
   char * SYSTEM_Buzzer;
   char * SYSTEM_Temperature;
   char * SYSTEM__Step;
@@ -104,6 +105,7 @@ typedef struct{
   char * SYSTEM_LVP;
   char * SYSTEM_Gui_Time;
   char * SYSTEM_Battery;
+  char * SYSTEM_AutoSwitchSet;
   char * SYSTEM_DEBUG;
   char * SYSTEM_RESET_MENU;
 
@@ -190,6 +192,7 @@ typedef struct{
   char * DownUp[2];
   char * wakeMode[2];
   char * encMode[2];
+  char * clkMode[2];
   char * errMode[3];
   char * InitMode[3];
   char * WakeModes[4];

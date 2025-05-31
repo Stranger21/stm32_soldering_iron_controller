@@ -23,5 +23,6 @@ void oled_draw(void);
 void oled_init(RE_Rotation_t (*Rotation)(RE_State_t*), RE_State_t *State);
 void oled_processInput(void);
 void oled_update(void);
+void oled_redraw(void); //функция для обновления экрана при автосмене профиля
 void oled_handle(void);
 #endif /* GRAPHICS_GUI_DISPLAY_H_ */

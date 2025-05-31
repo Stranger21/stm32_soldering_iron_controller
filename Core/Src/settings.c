@@ -12,6 +12,7 @@
 #include "display.h"
 #include "tempsensors.h"
 #include "main.h"
+#include "screen_common.h"
 
 #ifdef __BASE_FILE__
 #undef __BASE_FILE__
@@ -47,12 +48,14 @@ const systemSettings_t defaultSystemSettings = {
   .tempBigStep          = 20,                   // 20º big steps
   .activeDetection      = true,
   .hasBattery           = false,
-  .lvp                  = 110,                  // 11.0V Low voltage
+  .AutoSwitchSet		= false,
+  .lvp                  = 100,                  // 11.0V Low voltage
   .initMode             = mode_sleep,           // Safer to boot in sleep mode by default!
-  .buzzerMode           = disable,
+  .buzzerMode           = enable,
   .buttonWakeMode       = wake_all,
   .shakeWakeMode        = wake_all,
   .EncoderMode          = RE_Mode_Forward,
+  .ClickMode			= false,
   .debugEnabled         = disable,
   .language             = lang_english,
 };
@@ -91,7 +94,7 @@ const profile_settings_t defaultProfileSettings = {
   .tipFilter.reset_threshold  = 600,  // Any diff over 500 reset the filter (Tip removed or connected)
 
   #ifdef USE_NTC
-  .ntc.enabled                = enable,
+  .ntc.enabled                = disable,
   #ifdef PULLUP
   .ntc.pullup                 = 1,
   #elif defined PULLDOWN
@@ -116,10 +119,10 @@ const profile_settings_t defaultProfileSettings = {
   .sleepTimeout               = (uint32_t)5*60000,      // ms
   .standbyTimeout             = (uint32_t)5*60000,
   .standbyTemperature         = 180,
-  .MaxSetTemperature          = 450,
+  .MaxSetTemperature          = 400,
   .MinSetTemperature          = 180,
   .boostTimeout               = 60000,                  // ms
-  .boostTemperature           = 50,
+  .boostTemperature           = 0,
   .coldBoostEnabled           = true,
   .coldBoostTimeout           = 10000,                  // ms
   .coldBoostTemperature       = 150,
@@ -128,11 +131,11 @@ const profile_settings_t defaultProfileSettings = {
   .readDelay                  = (20*200)-1,              // 20ms (Also uses 5us clock)
   .tempUnit                   = mode_Celsius,
   .shakeFiltering             = disable,
-  .WakeInputMode              = mode_shake,
+  .WakeInputMode              = mode_stand,
   .smartActiveEnabled         = disable,
   .smartActiveLoad            = 30,
   .standDelay                 = 0,
-  .StandMode                  = mode_sleep,
+  .StandMode                  = mode_standby,
   .version                    = PROFILE_SETTINGS_VERSION,
 };
 
@@ -141,35 +144,35 @@ const tipData_t defaultTipData[NUM_PROFILES] = {
   [profile_T12] = {
     .calADC_At_250   = T12_Cal250,
     .calADC_At_400   = T12_Cal400,     // These values are way lower, but better to be safe than sorry
-    .PID.Kp          = 4500,           // val = /1.000.000
-    .PID.Ki          = 1500,           // val = /1.000.000
-    .PID.Kd          = 600,           // val = /1.000.000
-    .PID.maxI        = 70,             // val = /100
+    .PID.Kp          = 3000,           // val = /1.000.000
+    .PID.Ki          = 2000,           // val = /1.000.000
+    .PID.Kd          = 2000,           // val = /1.000.000
+    .PID.maxI        = 30,             // val = /100
     .PID.minI        = 0,              // val = /100
-    .name            = "T12-",               // Put some generic name
+    .name            = "C115-",               // Put some generic name
   },
   [profile_C245] = {
     .calADC_At_250   = C245_Cal250,
     .calADC_At_400   = C245_Cal400,
-    .PID.Kp          = 4500,           // val = /1.000.000
-    .PID.Ki          = 1500,           // val = /1.000.000
-    .PID.Kd          = 600,           // val = /1.000.000
-    .PID.maxI        = 70,             // val = /100
+    .PID.Kp          = 3000,           // val = /1.000.000
+    .PID.Ki          = 2000,           // val = /1.000.000
+    .PID.Kd          = 2000,           // val = /1.000.000
+    .PID.maxI        = 30,             // val = /100
     .PID.minI        = 0,
     .name            = "C245-",
   },
   [profile_C210] = {
     .calADC_At_250   = C210_Cal250,
     .calADC_At_400   = C210_Cal400,
-    .PID.Kp          = 4500,           // val = /1.000.000
-    .PID.Ki          = 1500,           // val = /1.000.000
-    .PID.Kd          = 600,           // val = /1.000.000
-    .PID.maxI        = 70,             // val = /100
+    .PID.Kp          = 3000,           // val = /1.000.000
+    .PID.Ki          = 2000,           // val = /1.000.000
+    .PID.Kd          = 2000,           // val = /1.000.000
+    .PID.maxI        = 30,             // val = /100
     .PID.minI        = 0,
     .name            =  "C210-",
   },
 };
-const char * defaultTipName[NUM_PROFILES] = { "T12-BC3", "C245-963", "C210-018" };
+const char * defaultTipName[NUM_PROFILES] = { "C115-112", "C245-K", "C210-K" };
 
 __attribute__((section(".globalSettings"))) flashSettings_t flashGlobalSettings;
 __attribute__((section(".tempSettings"))) temp_settings_t flashTempSettings;
@@ -962,9 +965,9 @@ static void resetProfileSettings(profile_settings_t * p, uint8_t profile){
   __disable_irq();
     if(profile==profile_T12){
       p->ID = profile_T12;
-      p->impedance                = 80;             // 8.0 Ohms
-      p->power                    = 80;             // 80W
-      p->noIronValue              = 4000;
+      p->impedance                = 21;             // 8.0 Ohms
+      p->power                    = 75;             // 80W
+      p->noIronValue              = 3900;
       p->Cal250_default           = T12_Cal250;
       p->Cal400_default           = T12_Cal400;
   }
@@ -982,7 +985,7 @@ static void resetProfileSettings(profile_settings_t * p, uint8_t profile){
       p->ID = profile_C210;
       p->power                  = 80;
       p->impedance              = 21;
-      p->noIronValue            = 1200;
+      p->noIronValue            = 3900;
       p->Cal250_default         = C210_Cal250;
       p->Cal400_default         = C210_Cal400;
   }
@@ -1056,8 +1059,10 @@ void loadProfile(uint8_t profile){
         loadTipDataFromFlash(flashTemp.tip[profile]);
     }
   }
+    
   TIP.filter=getProfileSettings()->tipFilter;
   ironSchedulePwmUpdate();
+  set_GUI_profile(profile);              //<----------- Add
   __set_PRIMASK(_irq);
 }
 

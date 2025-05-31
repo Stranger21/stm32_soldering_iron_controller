@@ -64,6 +64,10 @@ uint8_t update_GUI_Timer(void){
   return 0;
 }
 
+void set_GUI_profile(uint8_t p){        // Update GUI stored profile, to called only by LoadProfile()
+    profile = p;
+}
+
 int autoReturn_ProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *state){
   updatePlot();
   updateIronPower();

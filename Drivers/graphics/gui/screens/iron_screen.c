@@ -367,11 +367,24 @@ static void iron_onEnter(screen_t *scr){
     editable_IRON_ColdBoostTemp->inputData.endString="\260C";
   }
   if(scr==&Screen_settings){
-    comboResetIndex(Screen_iron.current_widget);
+		comboResetIndex(Screen_iron.current_widget);
+		if (getSystemSettings()->AutoSwitchSet == true){
+
+			editable_IRON_Profile->selectable.state=widget_idle;            // Set widget in idle mode
+			editable_IRON_Profile->selectable.previous_state=widget_idle;
+			}
   }
   else if(scr==&Screen_iron){                                           // iron screen was reloaded after changing the profile
-    editable_IRON_Profile->selectable.state=widget_edit;            // Set widget in editing mode
+    
+	if (getSystemSettings()->AutoSwitchSet == false){
+	editable_IRON_Profile->selectable.state=widget_edit;            // Set widget in editing mode
     editable_IRON_Profile->selectable.previous_state=widget_selected;
+	}else
+	{
+		editable_IRON_Profile->selectable.state=widget_idle;            // Set widget in idle mode
+		editable_IRON_Profile->selectable.previous_state=widget_idle;
+	}
+	
   }
 }
 
@@ -755,7 +768,7 @@ static void iron_create(screen_t *scr){
   edit->big_step = 10;
   edit->step = 5;
   edit->max_value = maxTemp/2;
-  edit->min_value = 10;
+  edit->min_value = 0;
   edit->setData = (setterFn)&setBoostTemp;
 
   //  [ Cold Boost Widget ]

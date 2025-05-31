@@ -111,15 +111,15 @@ xbm_t ScrSaverXBM = {
   .width=105,
   .height=7,
   .xbm=(const uint8_t[]){
-    0xFE, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-    0x07, 0x00, 0x01, 0x3E, 0xF8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x1C, 0x00, 0x01, 0x3E, 0xF8, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0xFC, 0x00, 0x01, 0x3E, 0xF8, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFC, 0x01, 0x01, 0x3E, 0xF8, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFC, 0x00, 0x01, 0x3E,
-    0xF8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1C, 0x00,
-    0xFE, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-    0x07, 0x00,
+    0x00, 0x00, 0xF0, 0xFF, 0xFF, 0xFF, 0x7F, 0x00, 0x00, 0x00, 0xF8, 0xFF,
+    0x00, 0x00, 0x00, 0x00, 0x1C, 0x00, 0x00, 0x00, 0xC0, 0xFF, 0xFF, 0xFF,
+    0x0F, 0x80, 0x07, 0x00, 0x80, 0xFF, 0x0F, 0x00, 0x00, 0x00, 0x80, 0x01,
+    0x00, 0x00, 0x08, 0x80, 0x3F, 0x00, 0xFF, 0x03, 0x07, 0x00, 0x00, 0x00,
+    0x00, 0x01, 0x00, 0x00, 0x08, 0x80, 0xFF, 0x01, 0x80, 0xFF, 0x0F, 0x00,
+    0x00, 0x00, 0x80, 0x01, 0x00, 0x00, 0x08, 0x80, 0x3F, 0x00, 0x00, 0x00,
+    0x1C, 0x00, 0x00, 0x00, 0xC0, 0xFF, 0xFF, 0xFF, 0x0F, 0x80, 0x07, 0x00,
+    0x00, 0x00, 0xF0, 0xFF, 0xFF, 0xFF, 0x7F, 0x00, 0x00, 0x00, 0xF8, 0xFF,
+    0x00, 0x00,
   },
 };
  xbm_t ironXBM_JBC = {
@@ -450,7 +450,9 @@ int main_screenProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *sta
       mainScr.lastIronMode_EncoderFix = getCurrentMode();
       IronWake(wakeSrc_Button);                                         // Send wake signal
       if(getCurrentMode()==mode_run){                                   // If mode actually changed
+        if (getSystemSettings()->ClickMode == false){					// Если режим нажатия не Буст
         input = Rotate_Nothing;                                         // Ignore rotation to prevent setpoint adjustment
+    }
         resetModeTimer();                                               // Reset mode timer
         if(mainScr.displayMode==temp_graph){                            // If in graph display mode
           mainScr.boost_allow=1;                                        // Allow boost triggering
@@ -476,6 +478,7 @@ int main_screenProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *sta
           mainScr.setMode=main_tipselect;
           break;
 
+// Клик энкодэром
         case Click:                                                         // Received a Click, enter low power mode.
         {
           bool bad_enc_detect = !checkIronModeTimer(250) && mainScr.lastIronMode_EncoderFix<mode_run; // Iron was sleeping but mode was changed less than 250ms ago (Rotation event) and we got a click, assume this is encoder malfunction
@@ -495,17 +498,62 @@ int main_screenProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *sta
           if( checkMainScreenModeTimer(300) || bad_enc_detect ){            // Wait at least 300ms after entering the screen before allowing click events from entering low power modes, otherwise the user might accidentally enter them.
             uint16_t beep_time =  bad_enc_detect ? 0 : MEDIUM_BEEP;         // Restore mode if bad encoder detected, we shouldn't have waken up, don't beep in this case.
 
+            if (getSystemSettings()->ClickMode == false){ //Если режим нажатия не Буст
             if(currentIronMode > mode_standby){
               setCurrentMode(mode_standby, beep_time);
             }
             else{
+				if(currentIronMode > mode_sleep){
               setCurrentMode(mode_sleep, beep_time);
+				}
+				else{
+					setCurrentMode(mode_run, beep_time);   // Добавил если нажатием дошли до Выкл - то следующее нажатие Включит режим нагрева
+				}
             }
           }
+        else {
+        	switch(currentIronMode){
+            case mode_sleep:								// Если сон		, то рабочий режим
+            case mode_standby:								// Если ожидание, то рабочий режим
+            	setCurrentMode(mode_run, MEDIUM_BEEP);
+            	break;
+            case mode_run:									// Если рабочий,  то буст
+            	setCurrentMode(mode_boost, MEDIUM_BEEP);
+				break;
+            case mode_boost:								// если буст,	  то рабочий режим
+            	setCurrentMode(mode_run, MEDIUM_BEEP);
+				break;
+            }	
+        }
+		  }  
           break;
         }
+		// Поворот налево 
+		case Rotate_Decrement:
+		if (getSystemSettings()->ClickMode == true){ //Если режим нажатия Буст
+            
+		if(checkMainScreenModeTimer(300)){				
+	            switch(currentIronMode){
+					case mode_standby:
+	            		setCurrentMode(mode_sleep, MEDIUM_BEEP);
+						break;
+					case mode_run:
+	            		setCurrentMode(mode_standby, MEDIUM_BEEP);
+						break;
+	            	case mode_boost:
+	            		setCurrentMode(mode_run, MEDIUM_BEEP);
+	            		break;
+	            	case mode_sleep:
+	            		setCurrentMode(mode_run, MEDIUM_BEEP);
+	            		break;
+	            }
+	            break;
+			}
+			break;
+		}
+		//Поворот направо 
         case Rotate_Increment:
-        case Rotate_Decrement:
+        //case Rotate_Decrement:
           if(mainScr.displayMode==temp_graph){
             if(!checkMainScreenModeTimer(500)){                             // If last rotation step happened <500ms ago, disable boost allow flag and modify the setpoint.
               mainScr.boost_allow=0;                                        // Disable boost allow flag
@@ -620,7 +668,9 @@ int main_screenProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *sta
 
           case Rotate_Increment_while_click:
           case Rotate_Decrement_while_click:
+        	if  (getSystemSettings()->AutoSwitchSet == false){ // Отключение переключения профиля ручкой
             mainScr.setMode=main_profileselect;
+        	}
             break;
 
           default:
@@ -678,7 +728,7 @@ int main_screenProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *sta
             break;
         }
 
-        if(profile!=getCurrentProfile()){
+        if(profile!=getCurrentProfile() && getSystemSettings()->AutoSwitchSet == false){
           updateTempData(force_update);                         // Update current data
           if(isCurrentProfileChanged())                         // If there's unsaved profile data
             Error_Handler();                                    // We shouldn't have anything unsaved here
@@ -707,8 +757,11 @@ int main_screenProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *sta
             }
           }
           else if(mainScr.ironStatus != status_error && currentIronMode==mode_run && !checkMainScreenModeTimer(1000)){
+            if (getSystemSettings()->ClickMode == false){ //Если режим нажатия не Буст
+            
             setCurrentMode(mode_boost, MEDIUM_BEEP);
           }
+        }
 
           mainScr.setMode=main_irontemp;
           break;

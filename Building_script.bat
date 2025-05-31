@@ -7,7 +7,7 @@ cd %~dp0
 SET SEARCH_PATH="C:\ST"
 
 :: [ENABLE THIS LINES TO MANUALLY SET THE TOOL PATHS]
-:: set IDEPATH="C:\ST\STM32CubeIDE_1.7.0\STM32CubeIDE"
+:: set IDEPATH="C:\ST\STM32CubeIDE_1.12.1\STM32CubeIDE"
 :: set IDE="%IDEPATH:"=%\stm32cubeide.exe"
 :: set MX="%IDEPATH:"=%\plugins\com.st.stm32cube.common.mx_6.3.0.202107141111\STM32CubeMX.jar"
 :: [Java path] You also use absolute path, ex "C:\JDK_19\bin\java.exe"

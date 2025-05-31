@@ -50,6 +50,7 @@ int longClickReturn(widget_t *w);
 int autoReturn_ProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *state);
 void updatePlot(void);
 uint8_t update_GUI_Timer(void);
+void set_GUI_profile(uint8_t p);
 void resetScreenTimer(void);
 void updateScreenTimer(RE_Rotation_t input);
 uint8_t checkScreenTimer(uint32_t time);

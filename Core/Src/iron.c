@@ -121,6 +121,45 @@ void ironInit(TIM_HandleTypeDef *delaytimer, TIM_HandleTypeDef *pwmtimer, uint32
   #endif
 }
 
+///Фунция переключения профилей по напряжению
+uint8_t AutoSwitchProfile(void){
+    static uint32_t change_timer;
+    static uint8_t profile, last_profile;
+    uint32_t volts = getSupplyVoltage_v_x10();
+    uint32_t now = HAL_GetTick();
+    uint8_t current_profile = getCurrentProfile();
+
+    if(!change_timer || change_timer > now){            // Idle or changing timeout active
+       
+        if(abs(volts - C245_volt) < Volt_Tolerance)      // Check voltages, assign profile
+            profile = profile_C245;
+        else if(abs(volts - C210_volt) < Volt_Tolerance)
+            profile = profile_C210;
+        else if(abs(volts - T12_volt) < Volt_Tolerance)
+            profile = profile_T12;
+        else
+            profile = profile_None;                  // Unknown voltage, set None to force safe mode
+       
+        if(profile!= last_profile){                     // Profile changed, start timer
+            last_profile = profile;
+            Iron.Pwm_Out=0;                             // Disable power while changing
+            __HAL_TIM_SET_COMPARE(Iron.Pwm_Timer, Iron.Pwm_Channel, 0);
+            Iron.CurrentIronPower=0;
+            change_timer = now+500;                     // 500ms timeout
+            return 1;
+        }
+    }
+    if(change_timer && change_timer < now){             // load profile stable for 500ms, timeout done
+        change_timer = 0;                               // Clear timer, load profile
+        if(profile != profile_None && profile != current_profile){
+            loadProfile(profile);
+            oled_redraw();
+            return 1;
+        }
+    }
+    return 0;
+}
+
 void handleIron(void) {
   static uint32_t reachedTime = 0;
   CurrentTime = HAL_GetTick();
@@ -723,7 +762,21 @@ void checkIronError(void){
     Iron.err_resumed = 1;                                                               // Set resume flag
     if(!Iron.boot_loaded){                                                              // Boot profile not loaded, use boot mode
       Iron.boot_loaded=1;
-      setCurrentMode(getSystemSettings()->initMode, 0);
+	  if(getProfileSettings()->WakeInputMode == mode_shake){					//Добавил функцию определения при запуске подставки. если на подставке то режим ее, если нет то режим запуска
+		setCurrentMode(getSystemSettings()->initMode, 0);
+		}
+		else{
+			if(WAKE_input()){
+				setCurrentMode(getSystemSettings()->initMode, 0);
+				}
+				else{
+					setCurrentMode(getProfileSettings()->StandMode, 0);
+					}
+		}
+	  
+	  
+	  
+      //setCurrentMode(getSystemSettings()->initMode, 0);
     }
     else{                                                                               // Already initialized boot mode, this error happened later
       if(getProfileSettings()->errorResumeMode==error_sleep)                           // Load mode defined in errorResumeMode

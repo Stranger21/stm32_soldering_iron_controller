@@ -53,6 +53,11 @@ void oled_update() {
   oled_draw();
 }
 
+void oled_redraw(void){
+    if(current_screen)
+        current_screen->state = screen_Erase;
+}
+
 void oled_init(RE_Rotation_t (*GetData)(RE_State_t*), RE_State_t *State) {
   screen_timer = current_time = HAL_GetTick();
   RE_State = State;

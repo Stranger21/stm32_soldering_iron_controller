@@ -48,6 +48,12 @@ typedef union{
 #define FLAG_SAFE_MODE    16
 #define FLAG_ACTIVE       128
 
+uint8_t AutoSwitchProfile(void);
+#define T12_volt        110     // 11.0V 115 ставим около 11 до 12.5 для 115
+#define C245_volt       190     // 19.0V
+#define C210_volt       140     // 14.0V 210 ставим около 13 до 15 для 210
+#define Volt_Tolerance  14      // 1.4V сколько вольт коридор для определения
+
 void readWake(void);
 bool IronWake(wakeSrc_t src);
 void resetIronError(void);

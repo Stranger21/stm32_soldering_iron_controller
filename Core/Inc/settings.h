@@ -33,12 +33,12 @@
 #define _BLANK_TIP        "        "                                // Empty tip name, containing (TIP_LEN) spaces. Defined here for quick updating if TIP_LEN is modified.
 
 #define TEMPSETTINGS_SAVE_TIME  3000                                // Last tip/profile/temperature in flash are updated after 3 seconds with no changes. This is not applied when battery option is enabled (Stored instantly).
-#define DEFAULT_TEMPERATURE     320                                 // Temperature loaded by default
+#define DEFAULT_TEMPERATURE     300                                 // Temperature loaded by default
 #ifndef PROFILE_VALUES
 
-#define T12_Cal250        1100                                      // Default values to be used in the calibration if not adjusted
-#define T12_Cal350        1200
-#define T12_Cal450        1300
+#define T12_Cal250        300                                      // Default values to be used in the calibration if not adjusted
+#define T12_Cal350        400
+#define T12_Cal450        500
 
 #define C210_Cal250       300
 #define C210_Cal350       400
@@ -253,8 +253,10 @@ __attribute__((aligned(4))) typedef struct{
   uint8_t       displayYflip;
   uint8_t       displayResRatio;
   uint8_t       hasBattery;
+  uint8_t		AutoSwitchSet;
   uint8_t       dim_inSleep;
   uint8_t       EncoderMode;
+  uint8_t		ClickMode;
   uint8_t       debugEnabled;
   uint8_t       activeDetection;
   uint8_t       dim_mode;

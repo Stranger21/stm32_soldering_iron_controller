@@ -21,7 +21,7 @@ static editable_widget_t *editable_system_GuiTempDenoise;
 
 void update_System_menu(void){
   bool mode = (getProfileSettings()->WakeInputMode==mode_shake);
-  comboitem_system_BootMode->enabled        = mode;
+  comboitem_system_BootMode->enabled        = true; //показывать всегда
   comboitem_system_ShakeWakeMode->enabled   = mode;
   comboitem_system_ButtonWakeMode->enabled  = mode;
 }
@@ -116,6 +116,18 @@ static void setEncoderMode(uint32_t *val) {
   RE_SetMode(&RE1_Data, getSystemSettings()->EncoderMode);
 }
 //=========================================================
+
+//=========================================================Изменения нажатия 
+static void * getClickMode() {
+  temp = getSystemSettings()->ClickMode;
+  return &temp;
+}
+static void setClickMode(uint32_t *val) {
+  getSystemSettings()->ClickMode = * val;
+  
+}
+//=========================================================
+
 static void * getGuiUpd_ms() {
   temp = getSystemSettings()->guiUpdateDelay;
   return &temp;
@@ -179,6 +191,15 @@ static void * getHasBattery() {
 }
 static void setHasBattery(uint32_t *val) {
   getSystemSettings()->hasBattery = * val;
+}
+//=========================================================
+//========================================================= Процедуры чтения и записи параметра включения Автопереключения профилей
+static void * getAutoSwitchSet() {
+  temp = getSystemSettings()->AutoSwitchSet;
+  return &temp;
+}
+static void setAutoSwitchSet(uint32_t *val) {
+  getSystemSettings()->AutoSwitchSet = * val;
 }
 //=========================================================
 static void system_onEnter(screen_t *scr){
@@ -268,6 +289,18 @@ static void system_create(screen_t *scr){
   edit->setData = (setterFn)&setEncoderMode;
   edit->options = strings[lang].encMode;
   edit->numberOfOptions = 2;
+  
+  //  [ Encoder Click Widget ]
+  //
+  newComboMultiOption(w, strings[lang].SYSTEM_Click, &edit, NULL);
+  dis=&edit->inputData;
+  dis->getData = &getClickMode;
+  edit->big_step = 1;
+  edit->step = 1;
+  edit->setData = (setterFn)&setClickMode;
+  edit->options = strings[lang].clkMode;
+  edit->numberOfOptions = 2;
+  
 
   //  [ Buzzer Widget ]
   //
@@ -376,6 +409,17 @@ static void system_create(screen_t *scr){
   edit->big_step = 1;
   edit->step = 1;
   edit->setData = (setterFn)&setHasBattery;
+  edit->options = strings[lang].OffOn;
+  edit->numberOfOptions = 2;
+  
+    //  [ AutoSwitchSet Widget ]
+  //
+  newComboMultiOption(w, strings[lang].SYSTEM_AutoSwitchSet,&edit, NULL);
+  dis=&edit->inputData;
+  dis->getData = &getAutoSwitchSet;
+  edit->big_step = 1;
+  edit->step = 1;
+  edit->setData = (setterFn)&setAutoSwitchSet;
   edit->options = strings[lang].OffOn;
   edit->numberOfOptions = 2;
 

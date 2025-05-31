@@ -341,12 +341,20 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* _hadc){
     }
 
     __HAL_TIM_SET_COUNTER(getIronPwmTimer(),0);                                             // Synchronize PWM
-#ifndef DEBUG
-    if((!getIronErrorFlags().safeMode) && (getCurrentMode() != mode_sleep) && getBootCompleteFlag()){
-      configurePWMpin(output_PWM);
-    }
-#endif
+//#ifndef DEBUG
+//    if((!getIronErrorFlags().safeMode) && (getCurrentMode() != mode_sleep) && getBootCompleteFlag()){
+//      configurePWMpin(output_PWM);
+//    }
+//#endif
     handle_ADC_Data();
+    //для переключения по напряжению проверяем переменную настроек
+	if(getSystemSettings()->AutoSwitchSet == true){
+    if(AutoSwitchProfile()){
+        HAL_IWDG_Refresh(&hiwdg);		// Profile changing, skip Iron processign and return
+        return;
+    }
+	}
+	
 #if defined DEBUG_PWM && defined SWO_PRINT
     if(dbg_t!=dbg_newData){                                                                 // Save values before handleIron() updates them
       dbg_prev_TIP_Raw=last_TIP_Raw;                                                        // If filter was resetted, print values
@@ -359,11 +367,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* _hadc){
 
     handleIron();
     runAwayCheck();
-#ifdef DEBUG                                                                                            // In debug mode, enable the tip power at the end
+//#ifdef DEBUG                                                                                            // In debug mode, enable the tip power at the end
     if((!getIronErrorFlags().safeMode) && (getCurrentMode() != mode_sleep) && getBootCompleteFlag()){   // Otherwise the tip will stay on and burn if stopping at the iron function
       configurePWMpin(output_PWM);
     }
-#endif
+//#endif
     HAL_IWDG_Refresh(&hiwdg);
   }
 }
