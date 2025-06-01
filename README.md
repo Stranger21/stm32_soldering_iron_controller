@@ -24,14 +24,27 @@ Video of operation here: (Project in active development, the features will chang
 
 [![STM32 T12 custom firmware](https://img.youtube.com/vi/j0HQq4aRiXw/0.jpg)](https://www.youtube.com/watch?v=j0HQq4aRiXw "STM32 T12 custom firmware")
 
-Add New function - 
+
+
+
+
+
+Add New function 
+ 
 1 Auto change profile depends on the input voltage. 
+
  T12_volt        110     // 11.0V for 115 
  C245_volt       190     // 19.0V for 245
  C210_volt       140     // 14.0V for 210 
  Volt_Tolerance  14      // 1.4V 
  
  On this function a system menu
+And on the input NTC 
+
+C245 = 0
+C210 = open
+C115 = 10kom
+
  
 2 T12 profile change to C115
 
