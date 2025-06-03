@@ -125,6 +125,7 @@ void ironInit(TIM_HandleTypeDef *delaytimer, TIM_HandleTypeDef *pwmtimer, uint32
 uint8_t AutoSwitchProfile(void){
     static uint32_t change_timer;
     static uint8_t profile, last_profile;
+	static uint8_t first_run = 1; // первый запуск
     uint32_t volts = getSupplyVoltage_v_x10();  // Напряжение входное 
 	uint32_t voltsNTC = NTC.last_avg;  // Напряжение NTC
     uint32_t now = HAL_GetTick();
@@ -143,7 +144,7 @@ uint8_t AutoSwitchProfile(void){
             profile = profile_None;                  // Unknown voltage, set None to force safe mode
        }else if(getSystemSettings()->AutoSwitchSet == autoset_ntc){ //Напряжение NTC
 
-			if((voltsNTC <= C245_volt_NTCmax)&&(voltsNTC >= C245_volt_NTCmin))      // Check voltages, assign profile
+		if((voltsNTC <= C245_volt_NTCmax)&&(voltsNTC >= C245_volt_NTCmin))      // Check voltages, assign profile
             profile = profile_C245;
         else if((voltsNTC <= C210_volt_NTCmax)&&(voltsNTC >= C210_volt_NTCmin))
             profile = profile_C210;
@@ -152,6 +153,16 @@ uint8_t AutoSwitchProfile(void){
         else
             profile = profile_None; 
 
+		}
+//разделил запуск переключения профиля на первый запуск и обычный с таймером . Отрисовка экрана только если загрузка завершена
+		if ((first_run)&&(profile != current_profile)&&(profile != profile_None)){
+			loadProfile(profile);
+			if(getBootCompleteFlag()) {
+				oled_redraw();
+				}
+			last_profile = profile;
+			first_run = 0;
+        return 1;
 		}
 
         if(profile!= last_profile){                     // Profile changed, start timer
@@ -167,7 +178,9 @@ uint8_t AutoSwitchProfile(void){
         change_timer = 0;                               // Clear timer, load profile
         if(profile != profile_None && profile != current_profile){
             loadProfile(profile);
-            oled_redraw();
+            if(getBootCompleteFlag()) {
+				oled_redraw();
+				}
             return 1;
         }
     }
