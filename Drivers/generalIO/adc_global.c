@@ -31,7 +31,7 @@ volatile ADCDataTypeDef_t TIP = {
 #ifdef USE_VIN
 volatile ADCDataTypeDef_t VIN = {
     .adc_buffer             = &ADC_measures[0].VIN,
-    .filter.coefficient     = 85,  // Уменьшил для большей отзывчивости
+    .filter.coefficient     = 70,  // Уменьшил для большей отзывчивости
     .filter.threshold       = 20,
     .filter.reset_threshold = 60,
     .filter.count_limit     = 0,
@@ -43,7 +43,7 @@ volatile ADCDataTypeDef_t VIN = {
 #ifdef USE_NTC
 volatile ADCDataTypeDef_t NTC = {
     .adc_buffer             = &ADC_measures[0].NTC,
-    .filter.coefficient     = 80,  //уменьшил для большей отзывчивости
+    .filter.coefficient     = 70,  //уменьшил для большей отзывчивости
     .filter.threshold       = 20,
     .filter.reset_threshold = 60,
     .filter.count_limit     = 0,
@@ -86,22 +86,6 @@ uint8_t ADC_Cal(void){
 
 void ADC_Init(ADC_HandleTypeDef *adc){
   adc_device=adc;
-    // Обнуляем буфер АЦП и фильтры
-    memset((void*)ADC_measures, 0, sizeof(ADC_measures));
-
-    TIP.last_avg = 0;
-    TIP.EMA_of_Input = 0;
-
-	VIN.last_avg = 0;
-    VIN.EMA_of_Input = 0;
-
-#ifdef USE_NTC
-    NTC.last_avg = 0;
-    NTC.EMA_of_Input = 0;   // <<<  обнуляем фильтр
-#endif
-
-
-
   ADC_ChannelConfTypeDef sConfig = {0};
 
   #ifdef STM32F072xB

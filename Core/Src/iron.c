@@ -124,8 +124,7 @@ void ironInit(TIM_HandleTypeDef *delaytimer, TIM_HandleTypeDef *pwmtimer, uint32
 ///Фунция переключения профилей по напряжению
 uint8_t AutoSwitchProfile(void){
     static uint32_t change_timer;
-    static uint8_t profile, last_profile;
-	static uint8_t first_run = 1; // первый запуск
+    static uint8_t profile = profile_None, last_profile = profile_None; // задаем значение не существующего профиля , НЕ ноль так как это 115 профиль
     uint32_t volts = getSupplyVoltage_v_x10();  // Напряжение входное 
 	uint32_t voltsNTC = NTC.last_avg;  // Напряжение NTC
     uint32_t now = HAL_GetTick();
@@ -154,23 +153,13 @@ uint8_t AutoSwitchProfile(void){
             profile = profile_None; 
 
 		}
-//разделил запуск переключения профиля на первый запуск и обычный с таймером . Отрисовка экрана только если загрузка завершена
-		if ((first_run)&&(profile != current_profile)&&(profile != profile_None)){
-			loadProfile(profile);
-			if(getBootCompleteFlag()) {
-				oled_redraw();
-				}
-			last_profile = profile;
-			first_run = 0;
-        return 1;
-		}
 
         if(profile!= last_profile){                     // Profile changed, start timer
             last_profile = profile;
             Iron.Pwm_Out=0;                             // Disable power while changing
             __HAL_TIM_SET_COMPARE(Iron.Pwm_Timer, Iron.Pwm_Channel, 0);
             Iron.CurrentIronPower=0;
-            change_timer = now+500;                     // 500ms timeout
+            change_timer = now+300;                     // 300ms timeout
             return 1;
         }
     }
