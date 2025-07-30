@@ -25,9 +25,6 @@ uint32_t temp;
 }
 #endif
 
-
-
-
 #ifdef USE_VREF
 uint16_t getReferenceVoltage_mv_x10() {
   return ADC_to_mV(VREF.last_avg);

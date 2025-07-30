@@ -849,8 +849,8 @@ static void iron_create(screen_t *scr){
   dis=&edit->inputData;
   dis->reservedChars=4;
   dis->getData = &getStandDelay;
-  edit->big_step = 10;
-  edit->step = 5;
+  edit->big_step = 5;
+  edit->step = 1;
   edit->setData = (setterFn)&setStandDelay;
   edit->max_value = 240;
   edit->min_value = 0;

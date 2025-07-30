@@ -28,7 +28,7 @@
 #endif
 
 #define NUM_PROFILES      3                                         // Number of profiles
-#define NUM_TIPS          85                                        // Number of tips for each profile
+#define NUM_TIPS          20                                        // Number of tips for each profile
 #define TIP_LEN           8                                         // String size for each tip name (Including null termination)
 #define _BLANK_TIP        "        "                                // Empty tip name, containing (TIP_LEN) spaces. Defined here for quick updating if TIP_LEN is modified.
 

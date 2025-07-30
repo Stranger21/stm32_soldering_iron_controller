@@ -163,7 +163,7 @@ uint8_t AutoSwitchProfile(void){
             return 1;
         }
     }
-    if(change_timer && change_timer < now){             // load profile stable for 500ms, timeout done
+    if(change_timer && change_timer < now){             // load profile stable for 300ms, timeout done
         change_timer = 0;                               // Clear timer, load profile
         if(profile != profile_None && profile != current_profile){
             loadProfile(profile);
@@ -178,6 +178,7 @@ uint8_t AutoSwitchProfile(void){
 
 void handleIron(void) {
   static uint32_t reachedTime = 0;
+  static uint8_t First_beep_st = 0;
   CurrentTime = HAL_GetTick();
   if(!Iron.Error.safeMode){
     if( (getSettings()->setupMode==enable) || getSystemSettings()->version!=SYSTEM_SETTINGS_VERSION || getProfileSettings()->version!=PROFILE_SETTINGS_VERSION ||
@@ -194,16 +195,22 @@ void handleIron(void) {
 
   // Controls external mode changes (from stand mode changes), this acts as a debouncing timer
   if(Iron.updateStandMode==needs_update){
+
     if(Iron.Error.active || Iron.calibrating){                                      // Ignore changes when error active or calibrating
       Iron.updateStandMode=no_update;
     }
     else{
+    	if ((getProfileSettings()->standDelay != 0)&&(First_beep_st == 0)&&(Iron.changeMode < mode_run)) { 							//Если задержка установки на подставку Не ноль - издаем короткий звук
+		 buzzer_beep(SHORT_BEEP);
+		 First_beep_st = 1;
+		 }
       if ( ((Iron.changeMode < mode_run) && (Iron.changeMode<Iron.CurrentMode) && (CurrentTime-Iron.LastModeChangeTime) > (!getProfileSettings()->standDelay ? 100 : (uint32_t)1000*getProfileSettings()->standDelay )) ||   // Low power mode mode, apply delay from settings, or debouncing if set to 0. Avoid setting higher low power mode than current.
            ((Iron.changeMode >= mode_run) && (CurrentTime-Iron.LastModeChangeTime) > 100) ){                                                                                              // Run/boost mode, just do some debouncing.
 
         Iron.updateStandMode=no_update;
         setCurrentMode(Iron.changeMode, MLONG_BEEP);
         Iron.lastWakeSrc = wakeSrc_Stand;
+        First_beep_st = 0;
       }
     }
   }
@@ -751,14 +758,14 @@ void checkIronError(void){
     Iron.Error.Flags |= Err.Flags;                                                      // Update stored Iron errors
     Iron.LastErrorTime = CurrentTime;                                                   // Update error time
     if(!Iron.Error.active){                                                             // Active flag wasnt set, this is a first occurring error
-      if(Err.Flags!=FLAG_NO_IRON){                                                      // Avoid alarm if only the tip is removed
+    	Iron.lastMode = Iron.CurrentMode;                                                 // Save current mode
+    	if(Err.Flags!=FLAG_NO_IRON){                                                      // Avoid alarm if only the tip is removed
         setCurrentMode(mode_sleep, 0);                                                  // Set sleep mode, no beeping as alarm is active
         buzzer_alarm_start();                                                           // Start alarm
       }
       else{
         setCurrentMode(mode_sleep, MEDIUM_BEEP);                                        // Set sleep mode, short beep, tip removed
       }
-      Iron.lastMode = Iron.CurrentMode;                                                 // Save current mode
       Iron.Error.active = 1;                                                            // Set active flag
       configurePWMpin(output_Low);                                                      // Force pin low to completely remove the power
     }
