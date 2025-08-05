@@ -598,7 +598,8 @@ int main_screenProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *sta
 
 				}
             resetModeTimer();                                               // Reset mode timer
-          }
+			mainScr.setMode=main_setpoint;
+			}
           else{
             mainScr.setMode=main_setpoint;
           }
