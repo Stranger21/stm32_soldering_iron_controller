@@ -166,7 +166,7 @@ static int tip_settings_processInput(screen_t * scr, RE_Rotation_t input, RE_Sta
   updatePlot();
   updateScreenTimer(input);
 
-  if(input==LongClick){
+  if((input==LongClick)||(input==VeryLongClick)){
     int x = longClickReturn(scr->current_widget);
     if (x!=-1){
       return x;

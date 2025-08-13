@@ -30,7 +30,9 @@ typedef struct {
   uint8_t             prevRunawayLevel;                     // Runaway previous level
   uint8_t             RunawayStatus;                        // Runaway triggered flag
   uint8_t             calibrating;                          // Flag to indicate calibration state (don't save temperature settings)
-  uint8_t             updateStandMode;                      // Flag to indicate the stand mode must be changed
+  uint8_t             standMode_update;                     // Flag to indicate the stand mode must be changed
+  uint8_t             standMode_beepDone;                   // Flag to indicate the stand change already beeped
+  uint8_t             tipchange;                            // Flag to indicate we're changing the tip
   uint8_t             shakeActive;                          // Flag to indicate handle movement
   uint8_t             temperatureReached;                   // Flag for temperature calibration
   uint8_t             updatePwm;                            // Flag to indicate PWM need to be updated
@@ -178,13 +180,13 @@ uint8_t AutoSwitchProfile(void){
 
 void handleIron(void) {
   static uint32_t reachedTime = 0;
-  static uint8_t First_beep_st = 0;
+  //static uint8_t First_beep_st = 0;
   CurrentTime = HAL_GetTick();
   if(!Iron.Error.safeMode){
     if( (getSettings()->setupMode==enable) || getSystemSettings()->version!=SYSTEM_SETTINGS_VERSION || getProfileSettings()->version!=PROFILE_SETTINGS_VERSION ||
         (getProfileSettings()->ID != getCurrentProfile()) || (getCurrentProfile()>=NUM_PROFILES)){
 
-      setSafeMode(enable);
+      setIronSafeMode(enable);
     }
   }
 
@@ -194,23 +196,44 @@ void handleIron(void) {
   checkIronError();                                                           // Check iron error again (Special case when iron has been detected, show other errors)
 
   // Controls external mode changes (from stand mode changes), this acts as a debouncing timer
-  if(Iron.updateStandMode==needs_update){
+  if(Iron.standMode_update==needs_update){
 
     if(Iron.Error.active || Iron.calibrating){                                      // Ignore changes when error active or calibrating
-      Iron.updateStandMode=no_update;
+      Iron.standMode_update=no_update;
     }
     else{
-    	if ((getProfileSettings()->standDelay != 0)&&(First_beep_st == 0)&&(Iron.changeMode < mode_run)) { 							//Если задержка установки на подставку Не ноль - издаем короткий звук
-		 buzzer_beep(SHORT_BEEP);
-		 First_beep_st = 1;
-		 }
-      if ( ((Iron.changeMode < mode_run) && (Iron.changeMode<Iron.CurrentMode) && (CurrentTime-Iron.LastModeChangeTime) > (!getProfileSettings()->standDelay ? 100 : (uint32_t)1000*getProfileSettings()->standDelay )) ||   // Low power mode mode, apply delay from settings, or debouncing if set to 0. Avoid setting higher low power mode than current.
-           ((Iron.changeMode >= mode_run) && (CurrentTime-Iron.LastModeChangeTime) > 100) ){                                                                                              // Run/boost mode, just do some debouncing.
+    	//Другой вариант короткого бип при постановке на подставку
+    	//if ((getProfileSettings()->standDelay != 0)&&(First_beep_st == 0)&&(Iron.changeMode < mode_run)) { 							//Если задержка установки на подставку Не ноль - издаем короткий звук
+		// buzzer_beep(SHORT_BEEP);
+		// First_beep_st = 1;
+		// }
+      //if ( ((Iron.changeMode < mode_run) && (Iron.changeMode<Iron.CurrentMode) && (CurrentTime-Iron.LastModeChangeTime) > (!getProfileSettings()->standDelay ? 100 : (uint32_t)1000*getProfileSettings()->standDelay )) ||   // Low power mode mode, apply delay from settings, or debouncing if set to 0. Avoid setting higher low power mode than current.
+       //    ((Iron.changeMode >= mode_run) && (CurrentTime-Iron.LastModeChangeTime) > 100) ){                                                                                              // Run/boost mode, just do some debouncing.
 
-        Iron.updateStandMode=no_update;
-        setCurrentMode(Iron.changeMode, MLONG_BEEP);
+       // Iron.standMode_update=no_update;
+       // setCurrentMode(Iron.changeMode, MLONG_BEEP);
+        //Iron.lastWakeSrc = wakeSrc_Stand;
+       // First_beep_st = 0;
+
+		if( (Iron.changeMode < mode_run) && (Iron.changeMode>=Iron.CurrentMode) ){    // Received a sleep/standby request from the handle while already in sleep or standby, probably noise, ignore
+        Iron.standMode_update = no_update;
         Iron.lastWakeSrc = wakeSrc_Stand;
-        First_beep_st = 0;
+      }
+      else{
+                      // Delay of 100ms when removing the handle, "standDelay" when placing the handle.
+        uint32_t delay = (Iron.changeMode < mode_run) ? (getProfileSettings()->standDelay ? (1000UL*getProfileSettings()->standDelay) : 100 ) : 100;
+        uint32_t elapsed = CurrentTime-Iron.LastModeChangeTime;
+
+        if (!Iron.standMode_beepDone && (elapsed > 30) ){                   // Apply a small delay of 30ms for the beep
+          Iron.standMode_beepDone = 1;
+          buzzer_beep(SHORT_BEEP);
+        }
+        if(elapsed > delay){
+          Iron.standMode_beepDone = 0;
+          Iron.standMode_update = no_update;
+          Iron.lastWakeSrc = wakeSrc_Stand;
+          setCurrentMode(Iron.changeMode, MLONG_BEEP);
+        }
       }
     }
   }
@@ -608,7 +631,7 @@ void setModefromStand(uint8_t mode){
 
   Iron.changeMode = mode;                                                       // Update mode
   Iron.LastModeChangeTime = HAL_GetTick();                                      // Reset debounce timer
-  Iron.updateStandMode = needs_update;                                          // Set flag
+  Iron.standMode_update = needs_update;                                          // Set flag
 }
 
 // Set the iron operating mode
@@ -707,23 +730,21 @@ void readWake(void){
   now_wake = WAKE_input();
 #endif
 
-    if(last_wake!=now_wake){                                            // If wake sensor input changed
-      last_wake=now_wake;
-      if(getProfileSettings()->WakeInputMode==mode_stand){
-        if(now_wake){
-          setModefromStand(mode_run);
-        }
-        else{
-          setModefromStand(getProfileSettings()->StandMode);            // Set sleep or standby mode depending on system setting
-        }
-      }
-      if(getProfileSettings()->WakeInputMode==mode_shake){
-        if(IronWake(wakeSrc_Shake)){
-          Iron.shakeActive = 1;
-          Iron.lastShakeTime = HAL_GetTick();
-        }
+  if(last_wake!=now_wake){                                            // If wake sensor input changed
+    if(Iron.tipchange)                                                // Suppress any actions while changing the tip
+      return;
+
+    last_wake=now_wake;
+    if(getProfileSettings()->WakeInputMode==mode_shake){
+      if(IronWake(wakeSrc_Shake)){
+        Iron.shakeActive = 1;
+        Iron.lastShakeTime = HAL_GetTick();
       }
     }
+    else if(getProfileSettings()->WakeInputMode==mode_stand){
+      setModefromStand(now_wake ? mode_run: getProfileSettings()->StandMode);
+    }
+  }
 }
 
 void resetIronError(void){
@@ -758,8 +779,8 @@ void checkIronError(void){
     Iron.Error.Flags |= Err.Flags;                                                      // Update stored Iron errors
     Iron.LastErrorTime = CurrentTime;                                                   // Update error time
     if(!Iron.Error.active){                                                             // Active flag wasnt set, this is a first occurring error
-    	Iron.lastMode = Iron.CurrentMode;                                                 // Save current mode
-    	if(Err.Flags!=FLAG_NO_IRON){                                                      // Avoid alarm if only the tip is removed
+      Iron.lastMode = Iron.CurrentMode;                                                 // Save current mode
+      if(Err.Flags!=FLAG_NO_IRON){                                                      // Avoid alarm if only the tip is removed
         setCurrentMode(mode_sleep, 0);                                                  // Set sleep mode, no beeping as alarm is active
         buzzer_alarm_start();                                                           // Start alarm
       }
@@ -820,7 +841,7 @@ uint32_t getIronLastErrorTime(void){
   return Iron.LastErrorTime;
 }
 
-void setSafeMode(bool mode){
+void setIronSafeMode(uint8_t mode){
   uint32_t _irq = __get_PRIMASK();
   __disable_irq();
   if(mode==disable && Iron.Error.Flags==(FLAG_ACTIVE | FLAG_SAFE_MODE)){                 // If only failsafe was active? (This should only happen because it was on first init screen)
@@ -837,6 +858,16 @@ void setSafeMode(bool mode){
   __set_PRIMASK(_irq);
 }
 
+void setIronTipChange(uint8_t mode){
+	
+	if(mode){
+			Iron.lastMode = Iron.CurrentMode;                                                 // Save current mode
+			setCurrentMode(mode_sleep, MLONG_BEEP);
+	}else
+		setCurrentMode(Iron.lastMode, MLONG_BEEP);											// Возврат в прежний режим после смены наконечника
+
+  Iron.tipchange = mode;
+}
 
 bool GetSafeMode(void){
   return(Iron.Error.safeMode && Iron.Error.active);

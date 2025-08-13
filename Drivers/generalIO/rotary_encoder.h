@@ -20,6 +20,7 @@ typedef enum {
   Release,                            /*!< Encoder was decremented */
   Click,
   LongClick,
+  VeryLongClick,
   Rotate_Nothing,                     /*!< Encoder stop at it was before */
 } RE_Rotation_t;
 
@@ -35,6 +36,7 @@ typedef enum {
   RE_BT_PRESSED,
   RE_BT_CLICKED,
   RE_BT_LONG_CLICK,
+  RE_BT_VERY_LONG_CLICK,
   RE_BT_DRAG,
   RE_BT_UNRELEASED,
   RE_BT_HIDLE

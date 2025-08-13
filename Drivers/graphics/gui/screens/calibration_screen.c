@@ -261,7 +261,7 @@ static int Cal_ProcessInput(struct screen_t *scr, RE_Rotation_t input, RE_State_
     }
   }
   else{
-    if(input==LongClick || checkScreenTimer(15000)){
+    if((input==LongClick) || (input==VeryLongClick) || checkScreenTimer(15000)){
       return screen_main;
     }
     else if(input==Rotate_Decrement_while_click){

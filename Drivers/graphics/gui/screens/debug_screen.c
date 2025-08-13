@@ -183,7 +183,7 @@ int debug_ProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *state) {
   if(input==Rotate_Decrement || input==Rotate_Increment ){
     return (default_screenProcessInput(scr, input, state));
   }
-  if(input==LongClick){
+  if((input==LongClick)||(input==VeryLongClick)){
     return screen_main;
   }
   if(checkScreenTimer(300000)){   // 5 min timeout

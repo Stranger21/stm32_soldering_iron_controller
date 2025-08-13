@@ -47,6 +47,9 @@ RE_Rotation_t RE_Get(RE_State_t* data) {
   else if(data->pv_click == RE_BT_LONG_CLICK) {
     data->pv_click = RE_BT_UNRELEASED;
     RETURN_WITH_STATUS(data, LongClick);
+  }else if(data->pv_click == RE_BT_VERY_LONG_CLICK) {
+    data->pv_click = RE_BT_UNRELEASED;
+    RETURN_WITH_STATUS(data, VeryLongClick);
   }
   else if (data->Diff < 0) {
     if(data->pv_click == RE_BT_DRAG) {
@@ -168,10 +171,12 @@ void RE_Process(RE_State_t* data) {
       push_time = current_time;
     }
     else if(data->pv_click == RE_BT_PRESSED) {
-      if((button_stable == 0)&&(pressed_time > 500)){
+      if((button_stable == 0)&&(pressed_time > 2500)){
+        data->pv_click = RE_BT_VERY_LONG_CLICK;
+      }else if((button_stable == 1)&&(pressed_time > 500)&&(pressed_time < 2500)){
         data->pv_click = RE_BT_LONG_CLICK;
       }
-      else if((button_stable == 1)&&(pressed_time > 50)){
+      else if((button_stable == 1)&&(pressed_time > 50)&&(pressed_time < 500)){
         data->pv_click = RE_BT_CLICKED;
       }
     }

@@ -1072,7 +1072,7 @@ int comboBoxProcessInput(widget_t *w, RE_Rotation_t input, RE_State_t *state) {
   if(w->refresh==refresh_idle){
     w->refresh=refresh_triggered;                                                                             // Update in combo erases whole screen (to avoid possible leftovers)
   }
-  if((input == Click) || (input == LongClick)){                                                               // If clicked
+  if((input == Click) || (input == LongClick)||(input==VeryLongClick)){                                                               // If clicked
     if (combo->currentItem->type==combo_Action){                                                              // If combo Action type
       return combo->currentItem->action(w, input);                                                                   // Process action
     }
@@ -1150,7 +1150,7 @@ int default_widgetProcessInput(widget_t *w, RE_Rotation_t input, RE_State_t *sta
   if(w->type==widget_combo){
     combo = (comboBox_widget_t*)w->content;
   }
-  if(input == LongClick) {
+  if((input == LongClick)||(input==VeryLongClick)) {
     if(sel->longPressAction){
       return sel->longPressAction(w);
     }

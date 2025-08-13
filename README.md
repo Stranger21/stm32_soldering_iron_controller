@@ -27,35 +27,55 @@ Video of operation here: (Project in active development, the features will chang
 
 
 
-
-
-Add New function 
- 
-1 Auto change profile depends on the input voltage. 
-
- T12_volt        110     // 11.0V for 115 
- C245_volt       190     // 19.0V for 245
- C210_volt       140     // 14.0V for 210 
- Volt_Tolerance  14      // 1.4V 
- 
- On this function a system menu
-And on the input NTC 
-
+Добавлены новые функции:<br>
+1 Авто смена профилей в зависимости от входного напряжения или сопровтиления на входе NTC<br>
+Включается в настройках системы.<br>
+Значения такие -<br> 
+ 11.0V для 115<br> 
+ 19.0V для 245<br>
+ 14.0V для 210<br> 
+ 1.4V диапазон<br>
+По NTC 
 C245 = 0
 C210 = open
 C115 = 10kom
+2 T12 профиль заменен на 115 с правкой начальных переменных.<br>
+3 Добавлена функция в меню переключающая нажатие на включение режима Bost, тогда поворот влево переключает режимы работы.<br>
+4 Изменены различные начальные переменные.<br>
+5 Добавлена иконка отображающая время возможной активации boost режима.<br>
+6 Добавлена функция короткого звука при постановке на подствку, если включена задержка подставки.<br>
+7 Добавлена функция смены наконечника. Долгое нажатие в течении 1-2 секунд включает режим смены наконечника. отключается питание. Выход автоматически через 20 секунд или по нажатию<br>
+Теперь более длинное нажатие 3 и более секунд открывает настройки , можно просто держать до открытия. Возврат после смены наконечника в прежний режим работы.<br>
 
+
+Add New function<br> 
  
-2 T12 profile change to C115
+1 Auto change profile depends on the input voltage.<br> 
 
-3 Add system menu function Clik for Boost when Run
-
-4 Other change default value 
-
-5 Add icon for time enabl boost mode
-
-6 Added a short beep function when placed on the stand and the delay is enabled
+11.0V for 115 <br>
+19.0V for 245<br>
+14.0V for 210<br> 
+1.4V <br>
  
+ On this function a system menu<br>
+And on the input NTC <br>
+
+C245 = 0<br>
+C210 = open<br>
+C115 = 10kom<br>
+ 
+2 T12 profile change to C115<br>
+
+3 Add system menu function Clik for Boost when Run.<br> 
+
+4 Other change default value <br>
+
+5 Add icon for time enabl boost mode<br>
+
+6 Added a short beep function when placed on the stand and the delay is enabled<br>
+
+7 Added a tip change function. Long press for 1-2 seconds triggers the tip change function for 20 seconds. Return by pressing or after 20 seconds. Pressing for more than 3 seconds now triggers the settings menu.<br>
+  After changing the tip, the previous mode is restored<br>
 
 
 ## Project details
