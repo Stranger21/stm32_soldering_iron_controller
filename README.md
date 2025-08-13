@@ -27,8 +27,8 @@ Video of operation here: (Project in active development, the features will chang
 
 
 
-Добавлены новые функции:<br>
-1 Авто смена профилей в зависимости от входного напряжения или сопровтиления на входе NTC<br>
+**Добавлены новые функции:**<br>
+**1** Авто смена профилей в зависимости от входного напряжения или сопровтиления на входе NTC<br>
 Включается в настройках системы.<br>
 Значения такие -<br> 
  11.0V для 115<br> 
@@ -39,18 +39,18 @@ Video of operation here: (Project in active development, the features will chang
 C245 = 0<br>
 C210 = open<br>
 C115 = 10kom<br>
-2 T12 профиль заменен на 115 с правкой начальных переменных.<br>
-3 Добавлена функция в меню переключающая нажатие на включение режима Bost, тогда поворот влево переключает режимы работы.<br>
-4 Изменены различные начальные переменные.<br>
-5 Добавлена иконка отображающая время возможной активации boost режима.<br>
-6 Добавлена функция короткого звука при постановке на подствку, если включена задержка подставки.<br>
-7 Добавлена функция смены наконечника. Долгое нажатие в течении 1-2 секунд включает режим смены наконечника. отключается питание. Выход автоматически через 20 секунд или по нажатию<br>
+**2** T12 профиль заменен на 115 с правкой начальных переменных.<br>
+**3** Добавлена функция в меню переключающая нажатие на включение режима Bost, тогда поворот влево переключает режимы работы.<br>
+**4** Изменены различные начальные переменные.<br>
+**5** Добавлена иконка отображающая время возможной активации boost режима.<br>
+**6** Добавлена функция короткого звука при постановке на подствку, если включена задержка подставки.<br>
+**7** Добавлена функция смены наконечника. Долгое нажатие в течении 1-2 секунд включает режим смены наконечника. отключается питание. Выход автоматически через 20 секунд или по нажатию<br>
 Теперь более длинное нажатие 3 и более секунд открывает настройки , можно просто держать до открытия. Возврат после смены наконечника в прежний режим работы.<br>
 
 
-Add New function<br> 
+**Add New function**<br> 
  
-1 Auto change profile depends on the input voltage.<br> 
+**1** Auto change profile depends on the input voltage.<br> 
 
 11.0V for 115 <br>
 19.0V for 245<br>
@@ -64,17 +64,17 @@ C245 = 0<br>
 C210 = open<br>
 C115 = 10kom<br>
  
-2 T12 profile change to C115<br>
+**2** T12 profile change to C115<br>
 
-3 Add system menu function Clik for Boost when Run.<br> 
+**3** Add system menu function Clik for Boost when Run.<br> 
 
-4 Other change default value <br>
+**4** Other change default value <br>
 
-5 Add icon for time enabl boost mode<br>
+**5** Add icon for time enabl boost mode<br>
 
-6 Added a short beep function when placed on the stand and the delay is enabled<br>
+**6** Added a short beep function when placed on the stand and the delay is enabled<br>
 
-7 Added a tip change function. Long press for 1-2 seconds triggers the tip change function for 20 seconds. Return by pressing or after 20 seconds. Pressing for more than 3 seconds now triggers the settings menu.<br>
+**7** Added a tip change function. Long press for 1-2 seconds triggers the tip change function for 20 seconds. Return by pressing or after 20 seconds. Pressing for more than 3 seconds now triggers the settings menu.<br>
   After changing the tip, the previous mode is restored<br>
 
 
