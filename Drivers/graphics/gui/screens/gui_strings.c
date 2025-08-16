@@ -1679,7 +1679,7 @@ const strings_t strings[LANGUAGE_COUNT] = {
 
 
 char * const tempUnit[2]              = { "\260C", "\260F" };
-char * const profileStr[NUM_PROFILES] = { "C115", "C245", "C210" };
+char * const profileStr[NUM_PROFILES] = { "T12", "C245", "C210", "C115" };
 char * const Langs[LANGUAGE_COUNT]    = {
                                             [lang_english]  = "EN",
                                             [lang_russian]  = "RU",

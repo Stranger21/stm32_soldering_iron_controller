@@ -37,11 +37,11 @@ _Min_Stack_Size = 0x300 ;	/* required amount of stack */
 MEMORY
 {
   RAM              (xrw) : ORIGIN = 0x20000000, LENGTH = 10K
-  FLASH            (rx)  : ORIGIN = 0x8000000,  LENGTH = 118K
+  FLASH            (rx)  : ORIGIN = 0x8000000,  LENGTH = 114K
   /* areas for storing the settings, keep the start and the end on page boundaries and continuous */
   GLOBAL_SETTINGS (rx)  : ORIGIN = ORIGIN(FLASH) + LENGTH(FLASH),       			LENGTH = 2048
-  TIPS (rx)  : ORIGIN = ORIGIN(GLOBAL_SETTINGS) + LENGTH(GLOBAL_SETTINGS),       	LENGTH = 6144
-  TEMP_SETTINGS    (rx)  : ORIGIN = ORIGIN(TIPS) + LENGTH(TIPS),                    LENGTH = 2048
+  TIPS (rx)  : ORIGIN = ORIGIN(GLOBAL_SETTINGS) + LENGTH(GLOBAL_SETTINGS),       	LENGTH = 8192
+  TEMP_SETTINGS    (rx)  : ORIGIN = ORIGIN(TIPS) + LENGTH(TIPS),                    LENGTH = 4096
 }
 
 

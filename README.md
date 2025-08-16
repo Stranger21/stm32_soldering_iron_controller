@@ -31,6 +31,7 @@ Video of operation here: (Project in active development, the features will chang
 **1** Авто смена профилей в зависимости от входного напряжения или сопровтиления на входе NTC<br>
 Включается в настройках системы.<br>
 Значения такие -<br> 
+ 24.0V для T12<br> 
  11.0V для 115<br> 
  19.0V для 245<br>
  14.0V для 210<br> 
@@ -38,20 +39,23 @@ Video of operation here: (Project in active development, the features will chang
 По NTC <br>
 C245 = 0<br>
 C210 = open<br>
-C115 = 10kom<br>
-**2** T12 профиль заменен на 115 с правкой начальных переменных.<br>
+T12 = 10kom<br>
+C115 = 5kom<br>
+**2** Добавлено 4е профиля T12 C245 C210 C115<br>
 **3** Добавлена функция в меню переключающая нажатие на включение режима Bost, тогда поворот влево переключает режимы работы.<br>
 **4** Изменены различные начальные переменные.<br>
 **5** Добавлена иконка отображающая время возможной активации boost режима.<br>
 **6** Добавлена функция короткого звука при постановке на подствку, если включена задержка подставки.<br>
 **7** Добавлена функция смены наконечника. Долгое нажатие в течении 1-2 секунд включает режим смены наконечника. отключается питание. Выход автоматически через 20 секунд или по нажатию<br>
 Теперь более длинное нажатие 3 и более секунд открывает настройки , можно просто держать до открытия. Возврат после смены наконечника в прежний режим работы.<br>
-
+**8** Добавлен физический вход PB6, 42 вывод процессора для плат 2.1s для режима смены наконечника. На других версиях не менялось. Алгоритм работы такой - желательно распаять цепь аналогичную входу S = последовательно<br>
+резистор около 4.7 ком и подпорка на + 3.3 тоже 4.7 ком. При установки наконечника на этот вход - система переходит в режим смены наконечника. После снятия с подставки запускается таймер 20сек<br>
 
 **Add New function**<br> 
  
 **1** Auto change profile depends on the input voltage.<br> 
 
+24.0V for T12<br> 
 11.0V for 115 <br>
 19.0V for 245<br>
 14.0V for 210<br> 
@@ -62,9 +66,10 @@ And on the input NTC <br>
 
 C245 = 0<br>
 C210 = open<br>
-C115 = 10kom<br>
+T12 = 10kom<br>
+C115 = 5kom<br>
  
-**2** T12 profile change to C115<br>
+**2** ADD 4 profile T12 C245 C210 C115<br>
 
 **3** Add system menu function Clik for Boost when Run.<br> 
 
@@ -76,7 +81,8 @@ C115 = 10kom<br>
 
 **7** Added a tip change function. Long press for 1-2 seconds triggers the tip change function for 20 seconds. Return by pressing or after 20 seconds. Pressing for more than 3 seconds now triggers the settings menu.<br>
   After changing the tip, the previous mode is restored<br>
-
+**8**Added physical input PB6, 42 CPU output for 2.1s boards for tip change mode. It has not changed on other versions. The algorithm of operation is as follows - it is advisable to desolder the circuit similar to the S = input in series<br>
+resistor about 4.7 k and a support on + 3.3 is also 4.7 k. When the tip is placed on this input, the system enters tip change mode. When the tip is removed from the stand, a 20-second timer starts<br>
 
 ## Project details
 * This project started by forking [PTDreamer's firmware](https://github.com/PTDreamer/stm32_soldering_iron_controller). Since then it became a separate project.

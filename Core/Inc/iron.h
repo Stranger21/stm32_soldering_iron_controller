@@ -49,19 +49,22 @@ typedef union{
 #define FLAG_ACTIVE       128
 
 uint8_t AutoSwitchProfile(void);
-#define T12_volt        110     // 11.0V 115 ставим около 11 до 12.5 для 115
-#define C245_volt       190     // 19.0V
-#define C210_volt       140     // 14.0V 210 ставим около 13 до 15 для 210
+#define T12_volt        240     // 24.0V ставим около 23 до 25 для T12
+#define C245_volt       190     // 19.0V 245
+#define C210_volt       140     // 14.0V ставим около 13 до 15 для 210
+#define C115_volt		110		// 11.0V ставим около 11 до 12.5 для 115
 #define Volt_Tolerance  14      // 1.4V сколько вольт коридор для определения
 
-#define T12_volt_NTCmax        2900     // Напряжения в отсчетах АЦП по формуле ADC = (4095*res)/(pullup+res) pullup равен 4.7 на схеме 2.1s 2600~9ком 2900~11ком  итого ставим около 10ком
+#define T12_volt_NTCmax        3000     // Напряжения в отсчетах АЦП по формуле ADC = (4095*res)/(pullup+res) pullup равен 4.7 на схеме 2.1s 2600~9ком 2900~11ком  итого ставим около 10ком
 #define T12_volt_NTCmin        2600
 #define C245_volt_NTCmax       800     //  245 замкнуто , или не больше 1 КОМ что  то около 800 
 #define C245_volt_NTCmin       0
 #define C210_volt_NTCmax       4095     // 210 открыто , что около 4095 или около 
 #define C210_volt_NTCmin       3900 
+#define C115_volt_NTCmax       2300     // 115 максимальный около 6 ком 
+#define C115_volt_NTCmin       1800 	// 115 минимальный около 4 ком 
 
-
+void readTIP_CHG(void);
 void readWake(void);
 bool IronWake(wakeSrc_t src);
 void resetIronError(void);
@@ -96,6 +99,7 @@ TIM_HandleTypeDef* getIronReadTimer(void);
 TIM_HandleTypeDef* getIronPwmTimer(void);
 void ironSchedulePwmUpdate(void);
 bool getBootCompleteFlag(void);
+bool getTipChangeFlag(void);
 void setBootCompleteFlag(void);
 bool getIronError(void);
 uint32_t getIronLastErrorTime(void);

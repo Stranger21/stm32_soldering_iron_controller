@@ -144,12 +144,12 @@ const tipData_t defaultTipData[NUM_PROFILES] = {
   [profile_T12] = {
     .calADC_At_250   = T12_Cal250,
     .calADC_At_400   = T12_Cal400,     // These values are way lower, but better to be safe than sorry
-    .PID.Kp          = 3000,           // val = /1.000.000
-    .PID.Ki          = 2000,           // val = /1.000.000
-    .PID.Kd          = 2000,           // val = /1.000.000
+    .PID.Kp          = 4500,           // val = /1.000.000
+    .PID.Ki          = 1500,           // val = /1.000.000
+    .PID.Kd          = 600,           // val = /1.000.000
     .PID.maxI        = 30,             // val = /100
     .PID.minI        = 0,              // val = /100
-    .name            = "C115-",               // Put some generic name
+    .name            = "T12-",               // Put some generic name
   },
   [profile_C245] = {
     .calADC_At_250   = C245_Cal250,
@@ -171,12 +171,22 @@ const tipData_t defaultTipData[NUM_PROFILES] = {
     .PID.minI        = 0,
     .name            =  "C210-",
   },
+  [profile_C115] = {
+    .calADC_At_250   = C115_Cal250,
+    .calADC_At_400   = C115_Cal400,
+    .PID.Kp          = 3000,           // val = /1.000.000
+    .PID.Ki          = 2000,           // val = /1.000.000
+    .PID.Kd          = 2000,           // val = /1.000.000
+    .PID.maxI        = 30,             // val = /100
+    .PID.minI        = 0,
+    .name            =  "C115-",
+  },
 };
-const char * defaultTipName[NUM_PROFILES] = { "C115-112", "C245-K", "C210-K" };
+const char * defaultTipName[NUM_PROFILES] = { "T12-BC3", "C245-K", "C210-K", "C115-112" };
 
 __attribute__((section(".globalSettings"))) flashSettings_t flashGlobalSettings;
 __attribute__((section(".tempSettings"))) temp_settings_t flashTempSettings;
-__attribute__((section(".tips"))) flashTipSlot_t flashTips[3];
+__attribute__((section(".tips"))) flashTipSlot_t flashTips[4];
 
 settings_t settings;
 
@@ -965,9 +975,9 @@ static void resetProfileSettings(profile_settings_t * p, uint8_t profile){
   __disable_irq();
     if(profile==profile_T12){
       p->ID = profile_T12;
-      p->impedance                = 21;             // 8.0 Ohms
-      p->power                    = 75;             // 80W
-      p->noIronValue              = 3900;
+      p->impedance                = 80;             // 8.0 Ohms
+      p->power                    = 80;             // 80W
+      p->noIronValue              = 4000;
       p->Cal250_default           = T12_Cal250;
       p->Cal400_default           = T12_Cal400;
   }
@@ -988,6 +998,14 @@ static void resetProfileSettings(profile_settings_t * p, uint8_t profile){
       p->noIronValue            = 3900;
       p->Cal250_default         = C210_Cal250;
       p->Cal400_default         = C210_Cal400;
+  }
+else if(profile==profile_C115){
+      p->ID = profile_C115;
+      p->power                  = 75;
+      p->impedance              = 21;
+      p->noIronValue            = 3900;
+      p->Cal250_default         = C115_Cal250;
+      p->Cal400_default         = C115_Cal400;
   }
   else{
     Error_Handler();  // We shouldn't get here!

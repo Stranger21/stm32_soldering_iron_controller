@@ -13,9 +13,9 @@
 #include "board.h"
 
 #define ENABLE_DBG_SAVE
-#define SWSTRING                  "SW: 1.13.14mod"                 // Software version reported in settings screen
-#define SYSTEM_SETTINGS_VERSION   29                                // Change this if you change the system settings struct to prevent getting out of sync
-#define PROFILE_SETTINGS_VERSION  4                                 // Same, but for profile settings struct
+#define SWSTRING                  "SW: 1.13.15mod"                 // Software version reported in settings screen
+#define SYSTEM_SETTINGS_VERSION   30                                // Change this if you change the system settings struct to prevent getting out of sync
+#define PROFILE_SETTINGS_VERSION  5                                 // Same, but for profile settings struct
 #define TIP_SETTINGS_VERSION      1                                 // Same, but for tip settings struct
 #define ADDONS_SETTINGS_VERSION   1                                 // Same, but for addons settings struct
 
@@ -27,7 +27,7 @@
 #define LANGUAGE_COUNT    (LANGUAGE_COUNT_WITH_CHINESE)
 #endif
 
-#define NUM_PROFILES      3                                         // Number of profiles
+#define NUM_PROFILES      4                                         // Number of profiles
 #define NUM_TIPS          20                                        // Number of tips for each profile
 #define TIP_LEN           8                                         // String size for each tip name (Including null termination)
 #define _BLANK_TIP        "        "                                // Empty tip name, containing (TIP_LEN) spaces. Defined here for quick updating if TIP_LEN is modified.
@@ -36,9 +36,13 @@
 #define DEFAULT_TEMPERATURE     300                                 // Temperature loaded by default
 #ifndef PROFILE_VALUES
 
-#define T12_Cal250        300                                      // Default values to be used in the calibration if not adjusted
-#define T12_Cal350        400
-#define T12_Cal450        500
+#define T12_Cal250        1100                                      // Default values to be used in the calibration if not adjusted
+#define T12_Cal350        1200
+#define T12_Cal450        1300
+
+#define C115_Cal250       300
+#define C115_Cal350       400
+#define C115_Cal450       500
 
 #define C210_Cal250       300
 #define C210_Cal350       400
@@ -111,6 +115,7 @@ typedef enum{
   profile_T12             = 0,
   profile_C245            = 1,
   profile_C210            = 2,
+  profile_C115            = 3,
   profile_None            = 0xff,
 
   save_settings           = 1,

@@ -340,6 +340,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* _hadc){
     if(getProfileSettings()->WakeInputMode==mode_stand){
       readWake();
     }
+	readTIP_CHG();
 
     __HAL_TIM_SET_COUNTER(getIronPwmTimer(),0);                                             // Synchronize PWM
 //#ifndef DEBUG

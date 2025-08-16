@@ -135,22 +135,26 @@ uint8_t AutoSwitchProfile(void){
     if(!change_timer || change_timer > now){            // Idle or changing timeout active
        if(getSystemSettings()->AutoSwitchSet == autoset_vin){  // Измерения по Входному напряжению
 
-        if(abs(volts - C245_volt) < Volt_Tolerance)      // Check voltages, assign profile
+        if(abs(volts - T12_volt) < Volt_Tolerance)      		// Check voltages, assign profile
+            profile = profile_T12;
+        else if(abs(volts - C245_volt) < Volt_Tolerance)      // Check voltages, assign profile
             profile = profile_C245;
         else if(abs(volts - C210_volt) < Volt_Tolerance)
             profile = profile_C210;
-        else if(abs(volts - T12_volt) < Volt_Tolerance)
-            profile = profile_T12;
+        else if(abs(volts - C115_volt) < Volt_Tolerance)
+            profile = profile_C115;
         else
             profile = profile_None;                  // Unknown voltage, set None to force safe mode
        }else if(getSystemSettings()->AutoSwitchSet == autoset_ntc){ //Напряжение NTC
 
-		if((voltsNTC <= C245_volt_NTCmax)&&(voltsNTC >= C245_volt_NTCmin))      // Check voltages, assign profile
+		if((voltsNTC <= T12_volt_NTCmax)&&(voltsNTC >= T12_volt_NTCmin))		//Проверяем напряжение на входе NTC для определения профиля
+            profile = profile_T12;
+		else if((voltsNTC <= C245_volt_NTCmax)&&(voltsNTC >= C245_volt_NTCmin))      
             profile = profile_C245;
         else if((voltsNTC <= C210_volt_NTCmax)&&(voltsNTC >= C210_volt_NTCmin))
             profile = profile_C210;
-        else if((voltsNTC <= T12_volt_NTCmax)&&(voltsNTC >= T12_volt_NTCmin))
-            profile = profile_T12;
+        else if((voltsNTC <= C115_volt_NTCmax)&&(voltsNTC >= C115_volt_NTCmin))
+            profile = profile_C115;
         else
             profile = profile_None; 
 
@@ -714,6 +718,22 @@ bool IronWake(wakeSrc_t src){                                                   
   Iron.lastWakeSrc = src;
   return 1;
 }
+void readTIP_CHG(void){											//Функция чтения входа подставки для смены наконечника
+	static bool last_tip_chg=1;
+	bool now_tip_chg;
+#ifdef TIP_CHG_Pin
+		now_tip_chg = TIP_CHG_input();							//Читаем состояние входа 
+#endif
+		if(last_tip_chg!=now_tip_chg){
+			last_tip_chg = now_tip_chg;
+			if (!now_tip_chg && !Iron.tipchange)				// Проверяем если вход =0 и смена наконечника =0 , для того чтобы не запускать снова пока мы не закончили смену наконечника
+				{
+				setIronTipChange(enable);	
+				
+				}
+
+		}
+}
 
 void readWake(void){
   static bool last_wake=0;
@@ -858,7 +878,7 @@ void setIronSafeMode(uint8_t mode){
   __set_PRIMASK(_irq);
 }
 
-void setIronTipChange(uint8_t mode){
+void setIronTipChange(uint8_t mode){												//функция смены наконечника
 	
 	if(mode){
 			Iron.lastMode = Iron.CurrentMode;                                                 // Save current mode
@@ -965,6 +985,17 @@ void ironSchedulePwmUpdate(void){
 
 bool getBootCompleteFlag(void){
   return Iron.boot_complete;
+}
+
+bool getTipChangeFlag(void){						//Функция передает состояние входа в другие части кода
+  //return Iron.tipchange;
+#ifdef TIP_CHG_Pin
+		return !TIP_CHG_input();
+#else 
+		return 0;
+#endif
+
+
 }
 
 void setBootCompleteFlag(void){
