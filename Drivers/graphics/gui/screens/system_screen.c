@@ -128,6 +128,17 @@ static void setClickMode(uint32_t *val) {
 }
 //=========================================================
 
+//=========================================================Таймер смены жала 
+static void * getChngTime() {
+  temp = getSystemSettings()->ChngTime/1000;
+  return &temp;
+}
+static void setChngTime(uint32_t *val) {
+  getSystemSettings()->ChngTime = * val*1000;
+  
+}
+//=========================================================
+
 static void * getGuiUpd_ms() {
   temp = getSystemSettings()->guiUpdateDelay;
   return &temp;
@@ -403,7 +414,20 @@ static void system_create(screen_t *scr){
   edit->setData = (setterFn)&setGuiUpd_ms;
   edit->max_value = 250;
   edit->min_value = 20;
-
+  
+  //  [ Таймер смены наконечника Widget ]
+  //
+  newComboEditable(w, strings[lang].SYSTEM_TipChg_Time, &edit, NULL);
+  dis=&edit->inputData;
+  dis->endString="s";
+  dis->reservedChars=3;
+  dis->getData = &getChngTime;
+  edit->big_step = 5;
+  edit->step = 1;
+  edit->setData = (setterFn)&setChngTime;
+  edit->max_value = 40;
+  edit->min_value = 0;
+  
   //  [ Battery Widget ]
   //
   newComboMultiOption(w, strings[lang].SYSTEM_Battery,&edit, NULL);

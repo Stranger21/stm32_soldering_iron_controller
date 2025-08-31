@@ -50,6 +50,7 @@ C115 = 5kom<br>
 Теперь более длинное нажатие 3 и более секунд открывает настройки , можно просто держать до открытия. Возврат после смены наконечника в прежний режим работы.<br>
 **8** Добавлен физический вход PB6, 42 вывод процессора для плат 2.1s для режима смены наконечника. На других версиях не менялось. Алгоритм работы такой - желательно распаять цепь аналогичную входу S = последовательно<br>
 резистор около 4.7 ком и подпорка на + 3.3 тоже 4.7 ком. При установки наконечника на этот вход - система переходит в режим смены наконечника. После снятия с подставки запускается таймер 20сек<br>
+**9** Добавлена настройка Время смены, для таймера после смены наконечника
 
 **Add New function**<br> 
  
@@ -81,8 +82,10 @@ C115 = 5kom<br>
 
 **7** Added a tip change function. Long press for 1-2 seconds triggers the tip change function for 20 seconds. Return by pressing or after 20 seconds. Pressing for more than 3 seconds now triggers the settings menu.<br>
   After changing the tip, the previous mode is restored<br>
-**8**Added physical input PB6, 42 CPU output for 2.1s boards for tip change mode. It has not changed on other versions. The algorithm of operation is as follows - it is advisable to desolder the circuit similar to the S = input in series<br>
+**8** Added physical input PB6, 42 CPU output for 2.1s boards for tip change mode. It has not changed on other versions. The algorithm of operation is as follows - it is advisable to desolder the circuit similar to the S = input in series<br>
 resistor about 4.7 k and a support on + 3.3 is also 4.7 k. When the tip is placed on this input, the system enters tip change mode. When the tip is removed from the stand, a 20-second timer starts<br>
+**9** Add Time Change in settings for timer after change tip
+
 
 ## Project details
 * This project started by forking [PTDreamer's firmware](https://github.com/PTDreamer/stm32_soldering_iron_controller). Since then it became a separate project.

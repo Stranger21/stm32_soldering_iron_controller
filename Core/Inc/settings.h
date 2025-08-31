@@ -14,7 +14,7 @@
 
 #define ENABLE_DBG_SAVE
 #define SWSTRING                  "SW: 1.13.15mod"                 // Software version reported in settings screen
-#define SYSTEM_SETTINGS_VERSION   30                                // Change this if you change the system settings struct to prevent getting out of sync
+#define SYSTEM_SETTINGS_VERSION   31                                // Change this if you change the system settings struct to prevent getting out of sync
 #define PROFILE_SETTINGS_VERSION  5                                 // Same, but for profile settings struct
 #define TIP_SETTINGS_VERSION      1                                 // Same, but for tip settings struct
 #define ADDONS_SETTINGS_VERSION   1                                 // Same, but for addons settings struct
@@ -283,6 +283,7 @@ __attribute__((aligned(4))) typedef struct{
   uint8_t       displayPrecharge;
   uint16_t      guiUpdateDelay;
   uint32_t      dim_Timeout;
+  uint32_t      ChngTime;
 }systemSettings_t;
 
 #ifdef ENABLE_ADDONS

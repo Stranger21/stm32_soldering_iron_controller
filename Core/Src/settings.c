@@ -42,20 +42,21 @@ const systemSettings_t defaultSystemSettings = {
   .displayResRatio      = 5,                    // For ST7565 only
 #endif
   .guiUpdateDelay       = 200,                  // ms
+  .ChngTime       		= 20000,                // ms время смены наконечника
   .guiTempDenoise       = 5,                    // ±5°C
   .tempUnit             = mode_Celsius,
   .tempStep             = 5,                    // 5º steps
   .tempBigStep          = 20,                   // 20º big steps
   .activeDetection      = true,
   .hasBattery           = false,
-  .AutoSwitchSet		= autoset_off,
+  .AutoSwitchSet		= autoset_off,			// Автопрофиль отключен
   .lvp                  = 100,                  // 10.0V Low voltage
   .initMode             = mode_sleep,           // Safer to boot in sleep mode by default!
   .buzzerMode           = enable,
   .buttonWakeMode       = wake_all,
   .shakeWakeMode        = wake_all,
   .EncoderMode          = RE_Mode_Forward,
-  .ClickMode			= false,
+  .ClickMode			= false,				// Режим нажатия
   .debugEnabled         = disable,
   .language             = lang_english,
 };
@@ -166,8 +167,8 @@ const tipData_t defaultTipData[NUM_PROFILES] = {
     .calADC_At_400   = C210_Cal400,
     .PID.Kp          = 3000,           // val = /1.000.000
     .PID.Ki          = 2000,           // val = /1.000.000
-    .PID.Kd          = 2000,           // val = /1.000.000
-    .PID.maxI        = 30,             // val = /100
+    .PID.Kd          = 1500,           // val = /1.000.000
+    .PID.maxI        = 25,             // val = /100
     .PID.minI        = 0,
     .name            =  "C210-",
   },
@@ -176,8 +177,8 @@ const tipData_t defaultTipData[NUM_PROFILES] = {
     .calADC_At_400   = C115_Cal400,
     .PID.Kp          = 3000,           // val = /1.000.000
     .PID.Ki          = 2000,           // val = /1.000.000
-    .PID.Kd          = 2000,           // val = /1.000.000
-    .PID.maxI        = 30,             // val = /100
+    .PID.Kd          = 1500,           // val = /1.000.000
+    .PID.maxI        = 25,             // val = /100
     .PID.minI        = 0,
     .name            =  "C115-",
   },

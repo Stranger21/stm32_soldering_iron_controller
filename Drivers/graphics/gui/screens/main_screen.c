@@ -860,7 +860,7 @@ int main_screenProcessInput(screen_t * scr, RE_Rotation_t input, RE_State_t *sta
       if(mainScr.ironStatus==status_error)
         trig=1;
 
-      if((trig && !getIronErrorFlags().noIron) || (current_time - mainScr.modeTimer > 20000) || input==Click || input==LongClick || input==VeryLongClick){ // Tip is back, >20s in this screen, or click, return to main screen
+      if((trig && !getIronErrorFlags().noIron) || (current_time - mainScr.modeTimer > getSystemSettings()->ChngTime) || input==Click || input==LongClick || input==VeryLongClick){ // Tip is back, >Времени заданного в настройках in this screen, or click, return to main screen
         setIronTipChange(disable);
         mainScr.setMode = mainScr.ironStatus==status_ok ? (trig ? main_tipselect_auto : main_irontemp) : main_irontemp; // Only go to tip select if the tip was actually changed. On error or unchanged, go to main screen.
         trig=0;

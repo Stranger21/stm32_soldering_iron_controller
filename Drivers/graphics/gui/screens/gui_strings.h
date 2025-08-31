@@ -104,6 +104,7 @@ typedef struct{
   char * SYSTEM_Active_Detection;
   char * SYSTEM_LVP;
   char * SYSTEM_Gui_Time;
+  char * SYSTEM_TipChg_Time;
   char * SYSTEM_Battery;
   char * SYSTEM_AutoSwitchSet;
   char * SYSTEM_DEBUG;
