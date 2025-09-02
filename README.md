@@ -49,8 +49,14 @@ C115 = 5kom<br>
 **7** Добавлена функция смены наконечника. Долгое нажатие в течении 1-2 секунд включает режим смены наконечника. отключается питание. Выход автоматически через 20 секунд или по нажатию<br>
 Теперь более длинное нажатие 3 и более секунд открывает настройки , можно просто держать до открытия. Возврат после смены наконечника в прежний режим работы.<br>
 **8** Добавлен физический вход PB6, 42 вывод процессора для плат 2.1s для режима смены наконечника. На других версиях не менялось. Алгоритм работы такой - желательно распаять цепь аналогичную входу S = последовательно<br>
-резистор около 4.7 ком и подпорка на + 3.3 тоже 4.7 ком. При установки наконечника на этот вход - система переходит в режим смены наконечника. После снятия с подставки запускается таймер 20сек<br>
+резистор около 4.7 ком и подпорка на + 3.3 тоже 4.7 ком. А так же необходимо фильтрация входа процессора емкостью 0.1мкф. При установки наконечника на этот вход - система переходит в режим смены наконечника. После снятия с подставки запускается таймер 20сек<br>
 **9** Добавлена настройка Время смены, для таймера после смены наконечника
+**10** Добавлена настройка порогов Автопрофилей в меню настрек системы. При этом резистор подтяжки читается из версии плат. Для некоторых он 4.7ком для других 10ком.<br>
+В настройках нет защиты от неправильного чередования!!! Поэтому настраиваем так - По напряжению +- 1.3 вольта коридор, следующее значение с учетом коридора не должны пересекаться!! Пример 11+1.3=12.3, 14-1.3=12.7<br>
+По сопротивлению примерно +- 0.3ом коридор поэтому значения не должны пересекаться! 99ком = открытому входу.<br>
+**11** Добавлена настройка входа смены наконечника, по умолчанию отключен.
+
+
 
 **Add New function**<br> 
  
@@ -83,9 +89,12 @@ C115 = 5kom<br>
 **7** Added a tip change function. Long press for 1-2 seconds triggers the tip change function for 20 seconds. Return by pressing or after 20 seconds. Pressing for more than 3 seconds now triggers the settings menu.<br>
   After changing the tip, the previous mode is restored<br>
 **8** Added physical input PB6, 42 CPU output for 2.1s boards for tip change mode. It has not changed on other versions. The algorithm of operation is as follows - it is advisable to desolder the circuit similar to the S = input in series<br>
-resistor about 4.7 k and a support on + 3.3 is also 4.7 k. When the tip is placed on this input, the system enters tip change mode. When the tip is removed from the stand, a 20-second timer starts<br>
+resistor about 4.7 k and a support on + 3.3 is also 4.7 k. It is also necessary to filter the processor input with a capacity of 0.1µF. When the tip is placed on this input, the system enters tip change mode. When the tip is removed from the stand, a 20-second timer starts<br>
 **9** Add Time Change in settings for timer after change tip
-
+**10** Added the setting of the thresholds of the Autoprofiles in the menu of the system nastrek. At the same time, the pull-up resistor is read from the version of the boards. For some, it is 4.7kom for others 10kom.<br>
+ There is no protection from incorrect alternation in the settings!!! Therefore, we set it up as follows - By voltage +- 1.3 volts, the next value should not cross!! 11+1.3=12.3, 14-1.3=12.7<br>
+ By resistance, approximately +- 0.3om, so the values should not cross! 99com = open input.<br>
+**11** Added tip change input setting, disabled by default.
 
 ## Project details
 * This project started by forking [PTDreamer's firmware](https://github.com/PTDreamer/stm32_soldering_iron_controller). Since then it became a separate project.

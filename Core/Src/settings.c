@@ -43,6 +43,29 @@ const systemSettings_t defaultSystemSettings = {
 #endif
   .guiUpdateDelay       = 200,                  // ms
   .ChngTime       		= 20000,                // ms время смены наконечника
+  .T12volt				= 240,					// Напряжения переключения профилей *10
+  .C245volt				= 200,
+  .C210volt				= 140,
+  .C115volt				= 110,
+  .T12_NTC				= 100,					// Сопротивления все * 10 
+  .C245_NTC				= 0,
+  .C210_NTC				= 990,
+  .C115_NTC				= 46,
+#ifdef USE_NTC
+  .NTC_pullup			= PULL_RES/100,					//Резистор подтяжки входа NTC 47 = 4.7ком читаем с плат
+#else
+  .NTC_pullup			= 47,
+#endif	
+  .T12_NTCmax			= 3000,					//Напряжения в отсчетах АЦП по формуле ADC = (4095*res)/(pullup+res) pullup равен 4.7 на схеме 2.1s 2600~9ком 2900~11ком  итого ставим около 10ком
+  .T12_NTCmin			= 2600,
+  .C245_NTCmax			= 200,
+  .C245_NTCmin			= 0,
+  .C210_NTCmax			= 4095,
+  .C210_NTCmin			= 3900,
+  .C115_NTCmax			= 2200,
+  .C115_NTCmin			= 1800,
+  .ChngPin_en			= disable,
+  
   .guiTempDenoise       = 5,                    // ±5°C
   .tempUnit             = mode_Celsius,
   .tempStep             = 5,                    // 5º steps

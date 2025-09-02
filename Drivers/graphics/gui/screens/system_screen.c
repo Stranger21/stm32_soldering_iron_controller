@@ -13,17 +13,33 @@ screen_t Screen_system;
 static comboBox_item_t *comboitem_system_ButtonWakeMode;
 static comboBox_item_t *comboitem_system_ShakeWakeMode;
 static comboBox_item_t *comboitem_system_BootMode;
-
+static comboBox_item_t *comboitem_system_AutoProfileNTC_T12;
+static comboBox_item_t *comboitem_system_AutoProfileNTC_C245;
+static comboBox_item_t *comboitem_system_AutoProfileNTC_C210;
+static comboBox_item_t *comboitem_system_AutoProfileNTC_C115;
+static comboBox_item_t *comboitem_system_AutoProfileVin_T12;
+static comboBox_item_t *comboitem_system_AutoProfileVin_C245;
+static comboBox_item_t *comboitem_system_AutoProfileVin_C210;
+static comboBox_item_t *comboitem_system_AutoProfileVin_C115;
 
 static editable_widget_t *editable_system_TempStep;
 static editable_widget_t *editable_system_bigTempStep;
 static editable_widget_t *editable_system_GuiTempDenoise;
 
-void update_System_menu(void){
+void update_System_menu(void){										//Обновление зависимых пунктов меню!
   bool mode = (getProfileSettings()->WakeInputMode==mode_shake);
   comboitem_system_BootMode->enabled        = true; //показывать всегда
   comboitem_system_ShakeWakeMode->enabled   = mode;
   comboitem_system_ButtonWakeMode->enabled  = mode;
+  comboitem_system_AutoProfileNTC_T12->enabled	= (getSystemSettings()->AutoSwitchSet == autoset_ntc); //Если включено Авропрофиль по NTC
+  comboitem_system_AutoProfileNTC_C245->enabled	= (getSystemSettings()->AutoSwitchSet == autoset_ntc);
+  comboitem_system_AutoProfileNTC_C210->enabled	= (getSystemSettings()->AutoSwitchSet == autoset_ntc);
+  comboitem_system_AutoProfileNTC_C115->enabled	= (getSystemSettings()->AutoSwitchSet == autoset_ntc);
+  comboitem_system_AutoProfileVin_T12->enabled	= (getSystemSettings()->AutoSwitchSet == autoset_vin); //Если включено Автропофиль по Напряжению
+  comboitem_system_AutoProfileVin_C245->enabled	= (getSystemSettings()->AutoSwitchSet == autoset_vin);
+  comboitem_system_AutoProfileVin_C210->enabled	= (getSystemSettings()->AutoSwitchSet == autoset_vin);
+  comboitem_system_AutoProfileVin_C115->enabled	= (getSystemSettings()->AutoSwitchSet == autoset_vin);
+  
 }
 
 void updateTemperatureUnit(void){
@@ -162,6 +178,16 @@ static void * getbuzzerMode() {
 static void setbuzzerMode(uint32_t *val) {
   getSystemSettings()->buzzerMode = *val;
 }
+//Обработка включения пина смены наконечника
+#ifdef TIP_CHG_Pin
+static void * getChngPin_en() {
+  temp = getSystemSettings()->ChngPin_en;
+  return &temp;
+}
+static void setChngPin_en(uint32_t *val) {
+  getSystemSettings()->ChngPin_en = *val;
+}
+#endif
 //=========================================================
 static void * getInitMode() {
   temp = getSystemSettings()->initMode;
@@ -214,8 +240,103 @@ static void setAutoSwitchSet(uint32_t *val) {
   if(getSystemSettings()->AutoSwitchSet == autoset_ntc){
   getProfileSettings()->ntc.enabled = disable;
   }
+  update_System_menu();
 }
 //=========================================================
+
+//========================================================= Процедуры записи и чтения напряжений автопрофилей
+static void * getT12volt() {
+  temp = getSystemSettings()->T12volt/10;
+  return &temp;
+}
+static void setT12volt(uint32_t *val) {
+  getSystemSettings()->T12volt = * val*10;
+  
+}
+static void * getC245volt() {
+  temp = getSystemSettings()->C245volt/10;
+  return &temp;
+}
+static void setC245volt(uint32_t *val) {
+  getSystemSettings()->C245volt = * val*10;
+  
+}
+static void * getC210volt() {
+  temp = getSystemSettings()->C210volt/10;
+  return &temp;
+}
+static void setC210volt(uint32_t *val) {
+  getSystemSettings()->C210volt = * val*10;
+  
+}
+static void * getC115volt() {
+  temp = getSystemSettings()->C115volt/10;
+  return &temp;
+}
+static void setC115volt(uint32_t *val) {
+  getSystemSettings()->C115volt = * val*10;
+  
+}
+//=========================================================
+
+//========================================================= Процедуры записи и чтения сопротивлений автопрофилей по NTC
+
+static void setNTCThresholds(uint32_t R, uint32_t *min, uint32_t *max) {
+    
+        uint32_t Vout = (4095 * R) / (R + getSystemSettings()->NTC_pullup);
+        *min = (Vout < 200) ? 0 : Vout - 200;
+        *max = Vout + 200;
+        if (*max > 4095) *max = 4095;
+    
+}
+static void * getT12_NTC() {
+  temp = getSystemSettings()->T12_NTC;
+  return &temp;
+}
+static void setT12_NTC(uint32_t *val) {
+  getSystemSettings()->T12_NTC = * val;
+  
+  	setNTCThresholds(*val, &getSystemSettings()->T12_NTCmin, &getSystemSettings()->T12_NTCmax);
+
+}
+
+static void * getC245_NTC() {
+  temp = getSystemSettings()->C245_NTC;
+  return &temp;
+}
+static void setC245_NTC(uint32_t *val) {
+  getSystemSettings()->C245_NTC = * val;
+  
+    setNTCThresholds(*val, &getSystemSettings()->C245_NTCmin, &getSystemSettings()->C245_NTCmax);
+
+  
+}
+static void * getC210_NTC() {
+  temp = getSystemSettings()->C210_NTC;
+  return &temp;
+}
+static void setC210_NTC(uint32_t *val) {
+  getSystemSettings()->C210_NTC = * val;
+  
+	setNTCThresholds(*val, &getSystemSettings()->C210_NTCmin, &getSystemSettings()->C210_NTCmax);
+
+  
+}
+static void * getC115_NTC() {
+  temp = getSystemSettings()->C115_NTC;
+  return &temp;
+}
+static void setC115_NTC(uint32_t *val) {
+	
+	getSystemSettings()->C115_NTC = * val;
+  	
+	setNTCThresholds(*val, &getSystemSettings()->C115_NTCmin, &getSystemSettings()->C115_NTCmax);
+   
+  
+}
+
+//=========================================================
+
 static void system_onEnter(screen_t *scr){
   if(scr==&Screen_settings){
     comboResetIndex(Screen_system.current_widget);
@@ -415,6 +536,17 @@ static void system_create(screen_t *scr){
   edit->max_value = 250;
   edit->min_value = 20;
   
+  //Включение входа смены наконечника
+  #ifdef TIP_CHG_Pin
+  newComboMultiOption(w, strings[lang].SYSTEM_ChngPin, &edit, NULL);
+  dis=&edit->inputData;
+  dis->getData = &getChngPin_en;
+  edit->big_step = 1;
+  edit->step = 1;
+  edit->setData = (setterFn)&setChngPin_en;
+  edit->options = strings[lang].OffOn;
+  edit->numberOfOptions = 2;
+  #endif
   //  [ Таймер смены наконечника Widget ]
   //
   newComboEditable(w, strings[lang].SYSTEM_TipChg_Time, &edit, NULL);
@@ -449,7 +581,103 @@ static void system_create(screen_t *scr){
   edit->setData = (setterFn)&setAutoSwitchSet;
   edit->options = strings[lang].AutoSet;
   edit->numberOfOptions = 3;
+  
+// Виджеты настройки Авропрофилей
+// По напряжению
+  newComboEditable(w, strings[lang].SYSTEM_T12volt, &edit, &comboitem_system_AutoProfileVin_T12);
+  dis=&edit->inputData;
+  dis->endString="v";
+  dis->reservedChars=3;
+  dis->getData = &getT12volt;
+  edit->big_step = 2;
+  edit->step = 1;
+  edit->setData = (setterFn)&setT12volt;
+  edit->max_value = 26;
+  edit->min_value = 15;
+  
+  newComboEditable(w, strings[lang].SYSTEM_C245volt, &edit, &comboitem_system_AutoProfileVin_C245);
+  dis=&edit->inputData;
+  dis->endString="v";
+  dis->reservedChars=3;
+  dis->getData = &getC245volt;
+  edit->big_step = 2;
+  edit->step = 1;
+  edit->setData = (setterFn)&setC245volt;
+  edit->max_value = 26;
+  edit->min_value = 15;
 
+  newComboEditable(w, strings[lang].SYSTEM_C210volt, &edit, &comboitem_system_AutoProfileVin_C210);
+  dis=&edit->inputData;
+  dis->endString="v";
+  dis->reservedChars=3;
+  dis->getData = &getC210volt;
+  edit->big_step = 2;
+  edit->step = 1;
+  edit->setData = (setterFn)&setC210volt;
+  edit->max_value = 17;
+  edit->min_value = 10;
+  
+  newComboEditable(w, strings[lang].SYSTEM_C115volt, &edit, &comboitem_system_AutoProfileVin_C115);
+  dis=&edit->inputData;
+  dis->endString="v";
+  dis->reservedChars=3;
+  dis->getData = &getC115volt;
+  edit->big_step = 2;
+  edit->step = 1;
+  edit->setData = (setterFn)&setC115volt;
+  edit->max_value = 14;
+  edit->min_value = 10;
+  
+// По NTC
+  newComboEditable(w, strings[lang].SYSTEM_T12NTC, &edit, &comboitem_system_AutoProfileNTC_T12);
+  dis=&edit->inputData;
+  dis->endString="k";
+  dis->reservedChars=5;
+  dis->number_of_dec=1;
+  dis->getData = &getT12_NTC;
+  edit->big_step = 20;
+  edit->step = 1;
+  edit->setData = (setterFn)&setT12_NTC;
+  edit->max_value = 990;
+  edit->min_value = 0;
+  
+  newComboEditable(w, strings[lang].SYSTEM_C245NTC, &edit, &comboitem_system_AutoProfileNTC_C245);
+  dis=&edit->inputData;
+  dis->endString="k";
+  dis->reservedChars=5;
+  dis->number_of_dec=1;
+  dis->getData = &getC245_NTC;
+  edit->big_step = 20;
+  edit->step = 1;
+  edit->setData = (setterFn)&setC245_NTC;
+  edit->max_value = 990;
+  edit->min_value = 0;
+
+  newComboEditable(w, strings[lang].SYSTEM_C210NTC, &edit, &comboitem_system_AutoProfileNTC_C210);
+  dis=&edit->inputData;
+  dis->endString="k";
+  dis->reservedChars=5;
+  dis->number_of_dec=1;
+  dis->getData = &getC210_NTC;
+  edit->big_step = 20;
+  edit->step = 1;
+  edit->setData = (setterFn)&setC210_NTC;
+  edit->max_value = 990;
+  edit->min_value = 0;
+  
+  newComboEditable(w, strings[lang].SYSTEM_C115NTC, &edit, &comboitem_system_AutoProfileNTC_C115);
+  dis=&edit->inputData;
+  dis->endString="k";
+  dis->reservedChars=5;
+  dis->number_of_dec=1;
+  dis->getData = &getC115_NTC;
+  edit->big_step = 20;
+  edit->step = 1;
+  edit->setData = (setterFn)&setC115_NTC;
+  edit->max_value = 990;
+  edit->min_value = 0;
+
+///=====================================================
 #ifdef ENABLE_DEBUG_SCREEN
   //  [ Debug enable Widget ]
   //

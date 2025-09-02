@@ -107,6 +107,16 @@ typedef struct{
   char * SYSTEM_TipChg_Time;
   char * SYSTEM_Battery;
   char * SYSTEM_AutoSwitchSet;
+  char * SYSTEM_T12volt;
+  char * SYSTEM_C245volt;
+  char * SYSTEM_C210volt;
+  char * SYSTEM_C115volt;
+  char * SYSTEM_T12NTC;
+  char * SYSTEM_C245NTC;
+  char * SYSTEM_C210NTC;
+  char * SYSTEM_C115NTC;
+  char * SYSTEM_NTC_pullup;
+  char * SYSTEM_ChngPin;
   char * SYSTEM_DEBUG;
   char * SYSTEM_RESET_MENU;
 

@@ -131,29 +131,29 @@ uint8_t AutoSwitchProfile(void){
 	uint32_t voltsNTC = NTC.last_avg;  // Напряжение NTC
     uint32_t now = HAL_GetTick();
     uint8_t current_profile = getCurrentProfile();
-
+	
     if(!change_timer || change_timer > now){            // Idle or changing timeout active
        if(getSystemSettings()->AutoSwitchSet == autoset_vin){  // Измерения по Входному напряжению
 
-        if(abs(volts - T12_volt) < Volt_Tolerance)      		// Check voltages, assign profile
+        if(abs(volts - getSystemSettings()->T12volt) < Volt_Tolerance)      		// Check voltages, assign profile
             profile = profile_T12;
-        else if(abs(volts - C245_volt) < Volt_Tolerance)      // Check voltages, assign profile
+        else if(abs(volts - getSystemSettings()->C245volt) < Volt_Tolerance)      // Check voltages, assign profile
             profile = profile_C245;
-        else if(abs(volts - C210_volt) < Volt_Tolerance)
+        else if(abs(volts - getSystemSettings()->C210volt) < Volt_Tolerance)
             profile = profile_C210;
-        else if(abs(volts - C115_volt) < Volt_Tolerance)
+        else if(abs(volts - getSystemSettings()->C115volt) < Volt_Tolerance)
             profile = profile_C115;
         else
             profile = profile_None;                  // Unknown voltage, set None to force safe mode
        }else if(getSystemSettings()->AutoSwitchSet == autoset_ntc){ //Напряжение NTC
 
-		if((voltsNTC <= T12_volt_NTCmax)&&(voltsNTC >= T12_volt_NTCmin))		//Проверяем напряжение на входе NTC для определения профиля
+		if((voltsNTC <= getSystemSettings()->T12_NTCmax)&&(voltsNTC >= getSystemSettings()->T12_NTCmin))		//Проверяем напряжение на входе NTC для определения профиля
             profile = profile_T12;
-		else if((voltsNTC <= C245_volt_NTCmax)&&(voltsNTC >= C245_volt_NTCmin))      
+		else if((voltsNTC <= getSystemSettings()->C245_NTCmax)&&(voltsNTC >= getSystemSettings()->C245_NTCmin))      
             profile = profile_C245;
-        else if((voltsNTC <= C210_volt_NTCmax)&&(voltsNTC >= C210_volt_NTCmin))
+        else if((voltsNTC <= getSystemSettings()->C210_NTCmax)&&(voltsNTC >= getSystemSettings()->C210_NTCmin))
             profile = profile_C210;
-        else if((voltsNTC <= C115_volt_NTCmax)&&(voltsNTC >= C115_volt_NTCmin))
+        else if((voltsNTC <= getSystemSettings()->C115_NTCmax)&&(voltsNTC >= getSystemSettings()->C115_NTCmin))
             profile = profile_C115;
         else
             profile = profile_None; 
@@ -989,12 +989,15 @@ bool getBootCompleteFlag(void){
 
 bool getTipChangeFlag(void){						//Функция передает состояние входа в другие части кода
   //return Iron.tipchange;
+  if (getSystemSettings()->ChngPin_en){
 #ifdef TIP_CHG_Pin
 		return !TIP_CHG_input();
 #else 
 		return 0;
 #endif
-
+  }
+  else 
+	  return 0;
 
 }
 

@@ -29,7 +29,7 @@ extern CRC_HandleTypeDef hcrc;
 #endif
 
 //#define DISABLE_OUTPUT                // Enable to fully disable the tip power (Ex. for debugging)
-#define DEBUG_ERROR                   // Enable to show file/line error messages
+//#define DEBUG_ERROR                   // Enable to show file/line error messages
 
 #ifdef DEBUG                          // By default, enable heap debugging in debug builds
 #define DEBUG_ALLOC                   // Watch "mi" and "max_allocated" variables!

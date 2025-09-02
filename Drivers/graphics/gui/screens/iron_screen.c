@@ -18,6 +18,7 @@ static comboBox_item_t *comboitem_StandDelay;
 static comboBox_item_t *comboitem_smartActiveLoad;
 static comboBox_item_t *comboItem_coldBoostTimeout;
 static comboBox_item_t *comboItem_coldBoostTemp;
+//static comboBox_item_t *comboItem_screen_iron_ntc;
 static editable_widget_t *editable_IRON_StandbyTemp;
 static editable_widget_t *editable_IRON_BoostTemp;
 static editable_widget_t *editable_IRON_ColdBoostTemp;
@@ -123,13 +124,14 @@ static void * get_reset_threshold() {
   return &temp;
 }
 //=========================================================
-void update_Iron_menu(void){
+void update_Iron_menu(void){																	//Включение зависимых пунктов меню!
   comboitem_ShakeFiltering->enabled = (getProfileSettings()->WakeInputMode==mode_shake);
   comboitem_StandMode->enabled = (getProfileSettings()->WakeInputMode==mode_stand);
   comboitem_StandDelay->enabled = (getProfileSettings()->WakeInputMode==mode_stand);
   comboitem_smartActiveLoad->enabled = (getProfileSettings()->smartActiveEnabled==enable);
   comboItem_coldBoostTimeout->enabled = (getProfileSettings()->coldBoostEnabled==enable);
   comboItem_coldBoostTemp->enabled = (getProfileSettings()->coldBoostEnabled==enable);
+  //comboItem_screen_iron_ntc->enabled = (getSystemSettings()->AutoSwitchSet != autoset_ntc);
 }
 //=========================================================
 #ifdef USE_VIN

@@ -541,7 +541,9 @@ static void MX_GPIO_Init(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
+  #ifdef DEBUG_ERROR
   CrashErrorHandler(file, line);
+  #endif
   /* USER CODE END Error_Handler_Debug */
 }
 

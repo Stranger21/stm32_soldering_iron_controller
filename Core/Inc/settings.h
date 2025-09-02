@@ -13,8 +13,8 @@
 #include "board.h"
 
 #define ENABLE_DBG_SAVE
-#define SWSTRING                  "SW: 1.13.15mod"                 // Software version reported in settings screen
-#define SYSTEM_SETTINGS_VERSION   31                                // Change this if you change the system settings struct to prevent getting out of sync
+#define SWSTRING                  "SW: 1.13.16mod"                 // Software version reported in settings screen
+#define SYSTEM_SETTINGS_VERSION   32                                // Change this if you change the system settings struct to prevent getting out of sync
 #define PROFILE_SETTINGS_VERSION  5                                 // Same, but for profile settings struct
 #define TIP_SETTINGS_VERSION      1                                 // Same, but for tip settings struct
 #define ADDONS_SETTINGS_VERSION   1                                 // Same, but for addons settings struct
@@ -275,6 +275,7 @@ __attribute__((aligned(4))) typedef struct{
   uint8_t       tempBigStep;
   uint8_t       guiTempDenoise;
   uint8_t       buzzerMode;
+  uint8_t       ChngPin_en;
   uint8_t       buttonWakeMode;
   uint8_t       shakeWakeMode;
   uint8_t       lvp;
@@ -282,6 +283,23 @@ __attribute__((aligned(4))) typedef struct{
   uint8_t       displayClk;
   uint8_t       displayPrecharge;
   uint16_t      guiUpdateDelay;
+  uint16_t      T12volt;
+  uint16_t      C245volt;
+  uint16_t      C210volt;
+  uint16_t      C115volt;
+  uint16_t		T12_NTC;
+  uint16_t		C245_NTC;
+  uint16_t		C210_NTC;
+  uint16_t		C115_NTC;
+  uint32_t		T12_NTCmax;
+  uint32_t		T12_NTCmin;
+  uint32_t		C245_NTCmax;
+  uint32_t		C245_NTCmin;
+  uint32_t		C210_NTCmax;
+  uint32_t		C210_NTCmin;
+  uint32_t		C115_NTCmax;
+  uint32_t		C115_NTCmin;
+  uint8_t		NTC_pullup;
   uint32_t      dim_Timeout;
   uint32_t      ChngTime;
 }systemSettings_t;

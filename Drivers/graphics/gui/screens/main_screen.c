@@ -355,8 +355,8 @@ void updateScreenSaver(void){
 
 // Switch main screen modes
 int8_t switchScreenMode(void){
-	if (getTipChangeFlag()){
-		mainScr.setMode = main_tipchange;
+	if (getTipChangeFlag()){												//Проверка флага входа смены наконечника
+		mainScr.setMode = main_tipchange;									//Тогда включаем режим смены наконечника
 		
 	}
   if(mainScr.setMode!=main_none){
