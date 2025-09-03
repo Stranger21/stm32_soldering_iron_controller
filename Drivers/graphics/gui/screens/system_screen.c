@@ -586,7 +586,7 @@ static void system_create(screen_t *scr){
 // По напряжению
   newComboEditable(w, strings[lang].SYSTEM_T12volt, &edit, &comboitem_system_AutoProfileVin_T12);
   dis=&edit->inputData;
-  dis->endString="v";
+  dis->endString="V";
   dis->reservedChars=3;
   dis->getData = &getT12volt;
   edit->big_step = 2;
@@ -597,7 +597,7 @@ static void system_create(screen_t *scr){
   
   newComboEditable(w, strings[lang].SYSTEM_C245volt, &edit, &comboitem_system_AutoProfileVin_C245);
   dis=&edit->inputData;
-  dis->endString="v";
+  dis->endString="V";
   dis->reservedChars=3;
   dis->getData = &getC245volt;
   edit->big_step = 2;
@@ -608,7 +608,7 @@ static void system_create(screen_t *scr){
 
   newComboEditable(w, strings[lang].SYSTEM_C210volt, &edit, &comboitem_system_AutoProfileVin_C210);
   dis=&edit->inputData;
-  dis->endString="v";
+  dis->endString="V";
   dis->reservedChars=3;
   dis->getData = &getC210volt;
   edit->big_step = 2;
@@ -619,7 +619,7 @@ static void system_create(screen_t *scr){
   
   newComboEditable(w, strings[lang].SYSTEM_C115volt, &edit, &comboitem_system_AutoProfileVin_C115);
   dis=&edit->inputData;
-  dis->endString="v";
+  dis->endString="V";
   dis->reservedChars=3;
   dis->getData = &getC115volt;
   edit->big_step = 2;
@@ -631,8 +631,8 @@ static void system_create(screen_t *scr){
 // По NTC
   newComboEditable(w, strings[lang].SYSTEM_T12NTC, &edit, &comboitem_system_AutoProfileNTC_T12);
   dis=&edit->inputData;
-  dis->endString="k";
-  dis->reservedChars=5;
+  dis->endString="KΩ";
+  dis->reservedChars=7;
   dis->number_of_dec=1;
   dis->getData = &getT12_NTC;
   edit->big_step = 20;
@@ -643,8 +643,8 @@ static void system_create(screen_t *scr){
   
   newComboEditable(w, strings[lang].SYSTEM_C245NTC, &edit, &comboitem_system_AutoProfileNTC_C245);
   dis=&edit->inputData;
-  dis->endString="k";
-  dis->reservedChars=5;
+  dis->endString="KΩ";
+  dis->reservedChars=7;
   dis->number_of_dec=1;
   dis->getData = &getC245_NTC;
   edit->big_step = 20;
@@ -655,8 +655,8 @@ static void system_create(screen_t *scr){
 
   newComboEditable(w, strings[lang].SYSTEM_C210NTC, &edit, &comboitem_system_AutoProfileNTC_C210);
   dis=&edit->inputData;
-  dis->endString="k";
-  dis->reservedChars=5;
+  dis->endString="KΩ";
+  dis->reservedChars=7;
   dis->number_of_dec=1;
   dis->getData = &getC210_NTC;
   edit->big_step = 20;
@@ -667,8 +667,8 @@ static void system_create(screen_t *scr){
   
   newComboEditable(w, strings[lang].SYSTEM_C115NTC, &edit, &comboitem_system_AutoProfileNTC_C115);
   dis=&edit->inputData;
-  dis->endString="k";
-  dis->reservedChars=5;
+  dis->endString="KΩ";
+  dis->reservedChars=7;
   dis->number_of_dec=1;
   dis->getData = &getC115_NTC;
   edit->big_step = 20;

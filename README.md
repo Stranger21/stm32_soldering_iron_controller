@@ -54,8 +54,8 @@ C115 = 5kom<br>
 **10** Добавлена настройка порогов Автопрофилей в меню настрек системы. При этом резистор подтяжки читается из версии плат. Для некоторых он 4.7ком для других 10ком.<br>
 В настройках нет защиты от неправильного чередования!!! Поэтому настраиваем так - По напряжению +- 1.3 вольта коридор, следующее значение с учетом коридора не должны пересекаться!! Пример 11+1.3=12.3, 14-1.3=12.7<br>
 По сопротивлению примерно +- 0.3ом коридор поэтому значения не должны пересекаться! 99ком = открытому входу.<br>
-**11** Добавлена настройка входа смены наконечника, по умолчанию отключен.
-
+**11** Добавлена настройка входа смены наконечника, по умолчанию отключен.<br>
+**12** Для плат версии KSGER 2.x включено дополнение - Вытяжка на выходе PB7<br> 
 
 
 **Add New function**<br> 
@@ -94,7 +94,10 @@ resistor about 4.7 k and a support on + 3.3 is also 4.7 k. It is also necessary 
 **10** Added the setting of the thresholds of the Autoprofiles in the menu of the system nastrek. At the same time, the pull-up resistor is read from the version of the boards. For some, it is 4.7kom for others 10kom.<br>
  There is no protection from incorrect alternation in the settings!!! Therefore, we set it up as follows - By voltage +- 1.3 volts, the next value should not cross!! 11+1.3=12.3, 14-1.3=12.7<br>
  By resistance, approximately +- 0.3om, so the values should not cross! 99com = open input.<br>
-**11** Added tip change input setting, disabled by default.
+**11** Added tip change input setting, disabled by default.<br>
+**12** For board KSGER 2.x enabled addon smoke extractor on the PB7 pin<br>
+
+
 
 ## Project details
 * This project started by forking [PTDreamer's firmware](https://github.com/PTDreamer/stm32_soldering_iron_controller). Since then it became a separate project.

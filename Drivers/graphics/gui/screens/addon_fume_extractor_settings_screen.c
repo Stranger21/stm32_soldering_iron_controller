@@ -61,7 +61,7 @@ static void addons_screen_fume_extractor_create(screen_t *scr)
 
   // After Run delay
   newComboEditable(w, strings[lang].FUME_EXTRACTOR_AfterRun, &edit, &comboitem_fume_extractor_after_run_widget);
-  edit->inputData.reservedChars = 4u;
+  edit->inputData.reservedChars = 5u;
   edit->inputData.endString     = strings[lang].FUME_EXTRACTOR_AfterRunUnit;
   edit->inputData.getData       = &getAfterRunDelay;
   edit->big_step                = 30;
