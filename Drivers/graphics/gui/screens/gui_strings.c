@@ -37,9 +37,9 @@ const strings_t strings[LANGUAGE_COUNT] = {
 #endif
 
 #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-      .FUME_EXTRACTOR_Title         = "FUME EXT. CTL.",
+      .FUME_EXTRACTOR_Title         = "EXT. CTL.",
       .FUME_EXTRACTOR_Mode          = "Mode",
-      .FUME_EXTRACTOR_Modes         = { "DISABLED", "AUTO", "ALW. ON" },
+      .FUME_EXTRACTOR_Modes         = { "DISABLED", "AUTO", "ALW. ON", "VACPUMP" },
       .FUME_EXTRACTOR_AfterRun      = "After Run",
       .FUME_EXTRACTOR_AfterRunUnit  = "s",
 #endif
@@ -233,9 +233,9 @@ const strings_t strings[LANGUAGE_COUNT] = {
 #endif
 
 #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-      .FUME_EXTRACTOR_Title         = "ВЫТЯЖКА",
+      .FUME_EXTRACTOR_Title         = "ВНЕШНЕЕ УПР.",
       .FUME_EXTRACTOR_Mode          = "Режим",
-      .FUME_EXTRACTOR_Modes         = { "ОТКЛ", "АВТО", "ПОСТ." },
+      .FUME_EXTRACTOR_Modes         = { "ОТКЛ", "АВТО", "ПОСТ.", "ОТСОС" },
       .FUME_EXTRACTOR_AfterRun      = "ПослСтарта",
       .FUME_EXTRACTOR_AfterRunUnit  = "с",
 #endif
@@ -428,9 +428,9 @@ const strings_t strings[LANGUAGE_COUNT] = {
 #endif
 
 #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-      .FUME_EXTRACTOR_Title         = "STYRN. UTSUG",
+      .FUME_EXTRACTOR_Title         = "EXT. CTL.",
       .FUME_EXTRACTOR_Mode          = "Läge",
-      .FUME_EXTRACTOR_Modes         = { "INAKTIV", "AUTO", "ALLT.PÅ" },
+      .FUME_EXTRACTOR_Modes         = { "INAKTIV", "AUTO", "ALLT.PÅ", "VACPUMP" },
       .FUME_EXTRACTOR_AfterRun      = "Extratid",
       .FUME_EXTRACTOR_AfterRunUnit  = "s",
 #endif
@@ -624,9 +624,9 @@ const strings_t strings[LANGUAGE_COUNT] = {
 #endif
 
 #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-      .FUME_EXTRACTOR_Title         = "FUME EXT. CTL.",
+      .FUME_EXTRACTOR_Title         = "EXT. CTL.",
       .FUME_EXTRACTOR_Mode          = "Mode",
-      .FUME_EXTRACTOR_Modes         = { "DISABLED", "AUTO", "ALW. ON" },
+      .FUME_EXTRACTOR_Modes         = { "DISABLED", "AUTO", "ALW. ON", "VACPUMP" },
       .FUME_EXTRACTOR_AfterRun      = "After Run",
       .FUME_EXTRACTOR_AfterRunUnit  = "s",
 #endif
@@ -820,9 +820,9 @@ const strings_t strings[LANGUAGE_COUNT] = {
 #endif
 
 #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-      .FUME_EXTRACTOR_Title         = "FUME EXT. CTL.",
+      .FUME_EXTRACTOR_Title         = "EXT. CTL.",
       .FUME_EXTRACTOR_Mode          = "Mode",
-      .FUME_EXTRACTOR_Modes         = { "DISABLED", "AUTO", "ALW. ON" },
+      .FUME_EXTRACTOR_Modes         = { "DISABLED", "AUTO", "ALW. ON", "VACPUMP" },
       .FUME_EXTRACTOR_AfterRun      = "After Run",
       .FUME_EXTRACTOR_AfterRunUnit  = "s",
 #endif
@@ -1016,9 +1016,9 @@ const strings_t strings[LANGUAGE_COUNT] = {
 #endif
 
 #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-      .FUME_EXTRACTOR_Title         = "ИЗВЕЖДАНЕ ДИМ",
+      .FUME_EXTRACTOR_Title         = "EXT. CTL.",
       .FUME_EXTRACTOR_Mode          = "Режим",
-      .FUME_EXTRACTOR_Modes         = { "ИЗКЛЮЧЕНО", "АВТО", "ВКЛЮЧЕНО" },
+      .FUME_EXTRACTOR_Modes         = { "ИЗКЛЮЧЕНО", "АВТО", "ВКЛЮЧЕНО", "ОТСОС" },
       .FUME_EXTRACTOR_AfterRun      = "След работа",
       .FUME_EXTRACTOR_AfterRunUnit  = "с",
 #endif
@@ -1211,9 +1211,9 @@ const strings_t strings[LANGUAGE_COUNT] = {
 #endif
 
 #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-      .FUME_EXTRACTOR_Title         = "ODTAH SPLODIN",
+      .FUME_EXTRACTOR_Title         = "EXT. CTL.",
       .FUME_EXTRACTOR_Mode          = "Mód",
-      .FUME_EXTRACTOR_Modes         = { "VYPNUTO", "AUTO", "ZAPNUTO" },
+      .FUME_EXTRACTOR_Modes         = { "VYPNUTO", "AUTO", "ZAPNUTO", "VACPUMP" },
       .FUME_EXTRACTOR_AfterRun      = "Při ÚTLUMu",
       .FUME_EXTRACTOR_AfterRunUnit  = "s",
 #endif
@@ -1408,9 +1408,9 @@ const strings_t strings[LANGUAGE_COUNT] = {
   #endif
 
   #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-        .FUME_EXTRACTOR_Title         = "排烟控制",
+        .FUME_EXTRACTOR_Title         = "EXT. CTL.",
         .FUME_EXTRACTOR_Mode          = "模式",
-        .FUME_EXTRACTOR_Modes         = { "关闭", "自动", "打开" },
+        .FUME_EXTRACTOR_Modes         = { "关闭", "自动", "打开", "VACPUMP" },
         .FUME_EXTRACTOR_AfterRun      = "连续工作",
         .FUME_EXTRACTOR_AfterRunUnit  = "s",
   #endif
@@ -1604,9 +1604,9 @@ const strings_t strings[LANGUAGE_COUNT] = {
 #endif
 
 #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-      .FUME_EXTRACTOR_Title         = "排煙控制",
+      .FUME_EXTRACTOR_Title         = "EXT. CTL.",
       .FUME_EXTRACTOR_Mode          = "模式",
-      .FUME_EXTRACTOR_Modes         = { "關閉", "自動", "開啟" },
+      .FUME_EXTRACTOR_Modes         = { "關閉", "自動", "開啟", "VACPUMP" },
       .FUME_EXTRACTOR_AfterRun      = "持續運作",
       .FUME_EXTRACTOR_AfterRunUnit  = "s",
 #endif

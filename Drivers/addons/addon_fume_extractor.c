@@ -57,6 +57,23 @@ void handleAddonFumeExtractor()
       HAL_GPIO_WritePin(EXTRACTOR_GPIO_Port, EXTRACTOR_Pin, GPIO_PIN_SET);
       break;
     }
+	
+	case fume_extractor_mode_vacpump:
+    {
+      // extractor is vacpump
+	  if(getCurrentMode() >= mode_run)
+      {
+        // Если рабочий режим или выше тогда включаем выход
+        extractorRequired = true;
+      }
+	  if(getCurrentMode() < mode_run)
+      {
+        // Если ниже рабочего режим то выключаем выход
+        extractorRequired = false;
+      }
+      HAL_GPIO_WritePin(EXTRACTOR_GPIO_Port, EXTRACTOR_Pin, extractorRequired ? GPIO_PIN_SET : GPIO_PIN_RESET);
+      break;
+    }
   }
 
 }

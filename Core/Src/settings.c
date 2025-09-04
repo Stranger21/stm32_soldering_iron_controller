@@ -96,7 +96,7 @@ const addonSettings_t defaultAddons = {
 #endif
   ,
 #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-  .fumeExtractorMode     = fume_extractor_mode_auto,
+  .fumeExtractorMode     = fume_extractor_mode_disabled,
   .fumeExtractorAfterrun = 2,
 #endif
 #ifdef ENABLE_ADDON_SWITCH_OFF_REMINDER

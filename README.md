@@ -55,8 +55,8 @@ C115 = 5kom<br>
 В настройках нет защиты от неправильного чередования!!! Поэтому настраиваем так - По напряжению +- 1.3 вольта коридор, следующее значение с учетом коридора не должны пересекаться!! Пример 11+1.3=12.3, 14-1.3=12.7<br>
 По сопротивлению примерно +- 0.3ом коридор поэтому значения не должны пересекаться! 99ком = открытому входу.<br>
 **11** Добавлена настройка входа смены наконечника, по умолчанию отключен.<br>
-**12** Для плат версии KSGER 2.x включено дополнение - Вытяжка на выходе PB7<br> 
-
+**12** Для плат версии KSGER 2.x включено дополнение - Внешнее управление на выходе PB7, Выключено, включено на время после старта паяльника, включено<br> 
+**13** Добавлен режим Отсос для внешнего управления, повторяет включение - выключение паяльника.
 
 **Add New function**<br> 
  
@@ -95,8 +95,8 @@ resistor about 4.7 k and a support on + 3.3 is also 4.7 k. It is also necessary 
  There is no protection from incorrect alternation in the settings!!! Therefore, we set it up as follows - By voltage +- 1.3 volts, the next value should not cross!! 11+1.3=12.3, 14-1.3=12.7<br>
  By resistance, approximately +- 0.3om, so the values should not cross! 99com = open input.<br>
 **11** Added tip change input setting, disabled by default.<br>
-**12** For board KSGER 2.x enabled addon smoke extractor on the PB7 pin<br>
-
+**12** For board KSGER 2.x enabled addon extended control on the PB7 pin, Off, On after Run in s, always on<br>
+**13** ADD VacPump mode for ext. ctrl.
 
 
 ## Project details

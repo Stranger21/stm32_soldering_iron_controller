@@ -11,6 +11,7 @@
 #include "main.h"
 
 #define SHORT_BEEP    (uint16_t)  50
+#define SHORT2_BEEP    (uint16_t)  100
 #define MEDIUM_BEEP   (uint16_t)  200
 #define MLONG_BEEP    (uint16_t)  500
 #define LONG_BEEP     (uint16_t)  2000

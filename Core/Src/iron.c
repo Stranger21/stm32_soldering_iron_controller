@@ -228,7 +228,7 @@ void handleIron(void) {
         uint32_t delay = (Iron.changeMode < mode_run) ? (getProfileSettings()->standDelay ? (1000UL*getProfileSettings()->standDelay) : 100 ) : 100;
         uint32_t elapsed = CurrentTime-Iron.LastModeChangeTime;
 
-        if (!Iron.standMode_beepDone && (elapsed > 30) ){                   // Apply a small delay of 30ms for the beep
+        if (!Iron.standMode_beepDone && (elapsed > 10) ){                   // Apply a small delay of 30ms for the beep
           Iron.standMode_beepDone = 1;
           buzzer_beep(SHORT_BEEP);
         }
@@ -236,7 +236,7 @@ void handleIron(void) {
           Iron.standMode_beepDone = 0;
           Iron.standMode_update = no_update;
           Iron.lastWakeSrc = wakeSrc_Stand;
-          setCurrentMode(Iron.changeMode, MLONG_BEEP);
+          setCurrentMode(Iron.changeMode, SHORT2_BEEP);
         }
       }
     }

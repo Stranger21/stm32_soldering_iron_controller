@@ -14,7 +14,7 @@
 
 #define ENABLE_DBG_SAVE
 #define SWSTRING                  "SW: 1.13.16mod"                 // Software version reported in settings screen
-#define SYSTEM_SETTINGS_VERSION   32                                // Change this if you change the system settings struct to prevent getting out of sync
+#define SYSTEM_SETTINGS_VERSION   33                                // Change this if you change the system settings struct to prevent getting out of sync
 #define PROFILE_SETTINGS_VERSION  5                                 // Same, but for profile settings struct
 #define TIP_SETTINGS_VERSION      1                                 // Same, but for tip settings struct
 #define ADDONS_SETTINGS_VERSION   1                                 // Same, but for addons settings struct
@@ -166,6 +166,7 @@ typedef enum{
   fume_extractor_mode_disabled  = 0,
   fume_extractor_mode_auto      = 1,
   fume_extractor_mode_always_on = 2,
+  fume_extractor_mode_vacpump 	= 3,
 #endif
 #ifdef ENABLE_ADDON_SWITCH_OFF_REMINDER
   switch_off_reminder_short_beep  = 0,
