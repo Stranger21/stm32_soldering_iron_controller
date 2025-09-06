@@ -56,7 +56,7 @@ C115 = 5kom<br>
 По сопротивлению примерно +- 0.3ом коридор поэтому значения не должны пересекаться! 99ком = открытому входу.<br>
 **11** Добавлена настройка входа смены наконечника, по умолчанию отключен.<br>
 **12** Для плат версии KSGER 2.x включено дополнение - Внешнее управление на выходе PB7, Выключено, включено на время после старта паяльника, включено<br> 
-**13** Добавлен режим Отсос для внешнего управления, повторяет включение - выключение паяльника.
+**13** Добавлен режим Отсос для внешнего управления, повторяет включение - выключение паяльника.<br>
 **14** Изменена логика работы режима Отсос, теперь он включает режим Датчик встряски, и на второе нажатие кнопки на входе S включает PB7 выход. первое нажатие включет нагрев<br> 
 
 
@@ -98,7 +98,7 @@ resistor about 4.7 k and a support on + 3.3 is also 4.7 k. It is also necessary 
  By resistance, approximately +- 0.3om, so the values should not cross! 99com = open input.<br>
 **11** Added tip change input setting, disabled by default.<br>
 **12** For board KSGER 2.x enabled addon extended control on the PB7 pin, Off, On after Run in s, always on<br>
-**13** ADD VacPump mode for ext. ctrl.
+**13** ADD VacPump mode for ext. ctrl.<br>
 **14** The logic of the Suction mode has been changed, now it includes the Shake sensor mode, and the second press of the S input button includes the PB7 output. The first press will turn on the heating<br>
 
 
