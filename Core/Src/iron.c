@@ -106,17 +106,17 @@ void ironInit(TIM_HandleTypeDef *delaytimer, TIM_HandleTypeDef *pwmtimer, uint32
   Iron.Pwm_Channel    = pwmchannel;
   Iron.Error.Flags    = FLAG_NOERROR;
 
-  if(getProfileSettings()->WakeInputMode == mode_shake){
-    setCurrentMode(getSystemSettings()->initMode, MLONG_BEEP);
-  }
-  else{
-    if(WAKE_input()){
-      setCurrentMode(mode_run, MLONG_BEEP);
-    }
-    else{
-      setCurrentMode(getProfileSettings()->StandMode, MLONG_BEEP);
-    }
-  }
+  //if(getProfileSettings()->WakeInputMode == mode_shake){
+   // setCurrentMode(getSystemSettings()->initMode, 0);
+  //}
+ //else{
+   // if(WAKE_input()){
+     // setCurrentMode(getSystemSettings()->initMode,0);
+   // }
+    //else{
+     // setCurrentMode(getProfileSettings()->StandMode, 0);
+   // }
+  //}
   initTimers();
   #ifdef USE_NTC
   detectNTC();
@@ -827,14 +827,14 @@ void checkIronError(void){
     if(!Iron.boot_loaded){                                                              // Boot profile not loaded, use boot mode
       Iron.boot_loaded=1;
 	  if(getProfileSettings()->WakeInputMode == mode_shake){					//Добавил функцию определения при запуске подставки. если на подставке то режим ее, если нет то режим запуска
-		setCurrentMode(getSystemSettings()->initMode, 0);
+		setCurrentMode(getSystemSettings()->initMode, SHORT2_BEEP);
 		}
 		else{
 			if(WAKE_input()){
-				setCurrentMode(getSystemSettings()->initMode, 0);
+				setCurrentMode(getSystemSettings()->initMode, SHORT2_BEEP);
 				}
 				else{
-					setCurrentMode(getProfileSettings()->StandMode, 0);
+					setCurrentMode(getProfileSettings()->StandMode, SHORT2_BEEP);
 					}
 		}
 	  

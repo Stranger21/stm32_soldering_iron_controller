@@ -25,6 +25,7 @@ static editable_widget_t *editable_IRON_ColdBoostTemp;
 static editable_widget_t *editable_IRON_MaxTemp;
 static editable_widget_t *editable_IRON_MinTemp;
 static editable_widget_t *editable_IRON_Profile;
+static editable_widget_t *editable_IRON_Wake;
 
 #ifdef USE_NTC
 screen_t Screen_iron_ntc;
@@ -370,15 +371,30 @@ static void iron_onEnter(screen_t *scr){
   }
   if(scr==&Screen_settings){
 		comboResetIndex(Screen_iron.current_widget);
-		if (getSystemSettings()->AutoSwitchSet != autoset_off){
+		#ifdef ENABLE_ADDON_FUME_EXTRACTOR
+		if (getAddons()->fumeExtractorMode == fume_extractor_mode_vacpump) { // Проверяем если режим дополнения Помпа то заблокировать редактирование режима подставки
+		editable_IRON_Wake->selectable.state=widget_idle;
+		editable_IRON_Wake->selectable.previous_state=widget_idle;
+			}
+		#endif
+		if (getSystemSettings()->AutoSwitchSet != autoset_off){             // Проверяем если автопрофили выключены тогда редактирование профилей доступно
 
 			editable_IRON_Profile->selectable.state=widget_idle;            // Set widget in idle mode
 			editable_IRON_Profile->selectable.previous_state=widget_idle;
 			}
   }
   else if(scr==&Screen_iron){                                           // iron screen was reloaded after changing the profile
-    
-	if (getSystemSettings()->AutoSwitchSet == autoset_off){
+    #ifdef ENABLE_ADDON_FUME_EXTRACTOR
+	if (getAddons()->fumeExtractorMode == fume_extractor_mode_vacpump) { // Проверяем если режим дополнения Помпа то заблокировать редактирование режима подставки
+		editable_IRON_Wake->selectable.state=widget_idle;
+		editable_IRON_Wake->selectable.previous_state=widget_idle;
+			}
+			else{
+				editable_IRON_Wake->selectable.state=widget_edit;
+				editable_IRON_Wake->selectable.previous_state=widget_selected;
+			}
+	#endif
+	if (getSystemSettings()->AutoSwitchSet == autoset_off){				// Проверяем если автопрофили выключены тогда редактирование профилей доступно
 	editable_IRON_Profile->selectable.state=widget_edit;            // Set widget in editing mode
     editable_IRON_Profile->selectable.previous_state=widget_selected;
 	}else
@@ -813,6 +829,7 @@ static void iron_create(screen_t *scr){
   //  [ Wake mode Widget ]
   //
   newComboMultiOption(w, strings[lang].IRON_Wake_Mode, &edit, NULL);
+  editable_IRON_Wake = edit;
   dis=&edit->inputData;
   dis->getData = &getWakeMode;
   edit->big_step = 1;

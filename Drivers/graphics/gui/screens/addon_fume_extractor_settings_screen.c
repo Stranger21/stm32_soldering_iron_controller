@@ -29,6 +29,7 @@ static void setFumeExtractorMode(uint32_t *val)
 {
   getAddons()->fumeExtractorMode = *val;
   update_addons_screen_fume_extractor();
+  getProfileSettings()->WakeInputMode = mode_shake;
 }
 
 static void* getAfterRunDelay()
