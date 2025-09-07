@@ -18,7 +18,6 @@ static comboBox_item_t *comboitem_StandDelay;
 static comboBox_item_t *comboitem_smartActiveLoad;
 static comboBox_item_t *comboItem_coldBoostTimeout;
 static comboBox_item_t *comboItem_coldBoostTemp;
-//static comboBox_item_t *comboItem_screen_iron_ntc;
 static editable_widget_t *editable_IRON_StandbyTemp;
 static editable_widget_t *editable_IRON_BoostTemp;
 static editable_widget_t *editable_IRON_ColdBoostTemp;
@@ -132,7 +131,6 @@ void update_Iron_menu(void){																	//Включение зависим
   comboitem_smartActiveLoad->enabled = (getProfileSettings()->smartActiveEnabled==enable);
   comboItem_coldBoostTimeout->enabled = (getProfileSettings()->coldBoostEnabled==enable);
   comboItem_coldBoostTemp->enabled = (getProfileSettings()->coldBoostEnabled==enable);
-  //comboItem_screen_iron_ntc->enabled = (getSystemSettings()->AutoSwitchSet != autoset_ntc);
 }
 //=========================================================
 #ifdef USE_VIN
@@ -369,41 +367,24 @@ static void iron_onEnter(screen_t *scr){
     editable_IRON_BoostTemp->inputData.endString="\260C";
     editable_IRON_ColdBoostTemp->inputData.endString="\260C";
   }
+	
   if(scr==&Screen_settings){
-		comboResetIndex(Screen_iron.current_widget);
-		#ifdef ENABLE_ADDON_FUME_EXTRACTOR
-		if (getAddons()->fumeExtractorMode == fume_extractor_mode_vacpump) { // Проверяем если режим дополнения Помпа то заблокировать редактирование режима подставки
-		editable_IRON_Wake->selectable.state=widget_idle;
-		editable_IRON_Wake->selectable.previous_state=widget_idle;
-			}
-		#endif
+		comboResetIndex(Screen_iron.current_widget);		
+  }
+  else if(scr==&Screen_iron){                                           // iron screen was reloaded after changing the profile
+	editable_IRON_Profile->selectable.state=widget_edit;            // Set widget in editing mode
+    editable_IRON_Profile->selectable.previous_state=widget_selected;	
+  }
 		if (getSystemSettings()->AutoSwitchSet != autoset_off){             // Проверяем если автопрофили выключены тогда редактирование профилей доступно
 
 			editable_IRON_Profile->selectable.state=widget_idle;            // Set widget in idle mode
 			editable_IRON_Profile->selectable.previous_state=widget_idle;
-			}
-  }
-  else if(scr==&Screen_iron){                                           // iron screen was reloaded after changing the profile
-    #ifdef ENABLE_ADDON_FUME_EXTRACTOR
-	if (getAddons()->fumeExtractorMode == fume_extractor_mode_vacpump) { // Проверяем если режим дополнения Помпа то заблокировать редактирование режима подставки
+			}  
+#ifdef ENABLE_ADDON_FUME_EXTRACTOR
+		if (getAddons()->fumeExtractorMode == fume_extractor_mode_vacpump) { // Проверяем если режим дополнения Помпа то заблокировать редактирование режима подставки
 		editable_IRON_Wake->selectable.state=widget_idle;
-		editable_IRON_Wake->selectable.previous_state=widget_idle;
 			}
-			else{
-				editable_IRON_Wake->selectable.state=widget_edit;
-				editable_IRON_Wake->selectable.previous_state=widget_selected;
-			}
-	#endif
-	if (getSystemSettings()->AutoSwitchSet == autoset_off){				// Проверяем если автопрофили выключены тогда редактирование профилей доступно
-	editable_IRON_Profile->selectable.state=widget_edit;            // Set widget in editing mode
-    editable_IRON_Profile->selectable.previous_state=widget_selected;
-	}else
-	{
-		editable_IRON_Profile->selectable.state=widget_idle;            // Set widget in idle mode
-		editable_IRON_Profile->selectable.previous_state=widget_idle;
-	}
-	
-  }
+#endif
 }
 
 static void iron_onExit(screen_t *scr){
