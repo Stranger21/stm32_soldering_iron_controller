@@ -1106,6 +1106,11 @@ void loadProfile(uint8_t profile){
   ironSchedulePwmUpdate();
   set_GUI_profile(profile);              //<----------- Add
   __set_PRIMASK(_irq);
+#ifdef ENABLE_ADDON_FUME_EXTRACTOR
+		if (getAddons()->fumeExtractorMode == fume_extractor_mode_vacpump) { // Проверяем если режим дополнения Помпа то Включить режим ручки
+		getProfileSettings()->WakeInputMode = mode_shake;
+			}
+#endif
 }
 
 tipData_t * getFlashTipData(uint8_t tip){
